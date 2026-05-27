@@ -16,9 +16,18 @@
     <Folder Include="Areas\Institucion\Controllers\" />
     <Folder Include="Areas\Institucion\Models\" />
     <Folder Include="Areas\Institucion\VIews\" />
+    <Folder Include="Areas\repositories\" />
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
     <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
