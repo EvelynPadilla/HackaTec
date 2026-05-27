@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Administrativo (GIE) - Mi-Proyecto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container" style="justify-content: center; align-items: center; background: linear-gradient(135deg, #1f2937 0%, #111827 100%);">
+        <main class="main-content" style="max-width: 400px; width: 100%; padding: 1rem;">
+
+            <div class="card" style="margin-bottom: 0; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);">
+
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h1 style="color: var(--primary-light); font-size: 1.6rem; margin-bottom: 0.25rem;">🔒 Panel de Control GIE</h1>
+                    <p style="color: var(--gray); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Módulo de Administración Seguro</p>
+                </div>
+
+                <form action="admin-gie.html" method="POST">
+
+                    <div class="form-group">
+                        <label for="admin-user">Usuario / Correo de Administrador *</label>
+                        <input type="text" id="admin-user" class="form-control" placeholder="Ej: admin_root o gie_coahuila" required autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="admin-password">Contraseña de Seguridad *</label>
+                        <input type="password" id="admin-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+                    </div>
+
+                    <div style="background: #fef2f2; border-left: 3px solid var(--danger); padding: 0.75rem; border-radius: 4px; margin-bottom: 1.5rem;">
+                        <p style="font-size: 0.75rem; color: #991b1b; margin: 0;">
+                            <strong>Advertencia:</strong> Todo intento de acceso no autorizado será registrado en la bitácora del servidor.
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn btn--danger btn--block" style="padding: 0.75rem;">
+                        Autenticar Administrador
+                    </button>
+                </form>
+
+                <div style="margin-top: 1.5rem; text-align: center; border-top: 1px solid var(--light); padding-top: 1rem; font-size: 0.85rem;">
+                    <a href="login.html" style="color: var(--gray); text-decoration: none;">← Volver al Acceso Público</a>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>
