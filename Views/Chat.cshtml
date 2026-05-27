@@ -1,0 +1,59 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensajería en Tiempo Real - Mi-Proyecto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="navbar__brand">💬 Centro de Vinculación Instantánea</div>
+            <a href="feed.html" style="color: white; text-decoration: none;">Volver al Feed</a>
+        </nav>
+
+        <div class="chat-container">
+            <aside class="chat-sidebar">
+                <div style="padding: 1rem; border-bottom: 1px solid var(--light); background: #f9fafb;">
+                    <strong>Conversaciones</strong>
+                </div>
+                <div style="padding: 1rem; border-bottom: 1px solid var(--light); cursor: pointer; background: #eff6ff;">
+                    <h4>Primaria Benito Juárez</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray);">Post: Falta de pintura...</p>
+                </div>
+            </aside>
+
+            <main class="chat-window">
+                <div style="background: #f8fafc; padding: 0.75rem; border-bottom: 1px solid var(--gray); font-size: 0.85rem;">
+                    📌 <strong>Vinculado a la necesidad:</strong> "Falta de pintura acrílica para fachadas de salones"
+                </div>
+
+                <div class="chat-messages">
+                    <div class="message message--out">
+                        <p>Hola, buenas tardes. Vi su post en el feed. Tengo media cubeta de pintura blanca que me sobró el mes pasado. ¿Les sirve?</p>
+                    </div>
+                    <div class="message message--in">
+                        <p>¡Buenas tardes! Claro que sí, nos es de muchísima ayuda para avanzar con las esquinas interiores.</p>
+                    </div>
+                    <div class="message message--out">
+                        <p>Perfecto. Les adjunto foto de la marca para que la revisen.</p>
+                        <img src="https://via.placeholder.com/150" alt="Evidencia material" style="max-width:100%; border-radius:4px; margin-top:5px;">
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="file" id="chat-file" style="display: none;" accept=".jpg,.png">
+                    <button class="btn btn--primary" onclick="document.getElementById('chat-file').click()">📷</button>
+                    <input type="text" class="form-control" placeholder="Escribe un mensaje seguro e inmutable...">
+                    <button class="btn btn--success">Enviar</button>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
