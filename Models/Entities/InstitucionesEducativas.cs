@@ -11,6 +11,8 @@ public partial class InstitucionesEducativas
 
     public string Nombre { get; set; } = null!;
 
+    public string Contrasena { get; set; } = null!;
+
     public string Direccion { get; set; } = null!;
 
     public string PersonaResponsable { get; set; } = null!;

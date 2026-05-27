@@ -49,8 +49,12 @@ public partial class HackatecContext : DbContext
             entity.ToTable("administrador");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Contraseña).HasMaxLength(45);
-            entity.Property(e => e.Usuario).HasMaxLength(30);
+            entity.Property(e => e.Contrasena)
+                .HasMaxLength(255)
+                .HasColumnName("contrasena");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(80)
+                .HasColumnName("nombre");
         });
 
         modelBuilder.Entity<ImagenesNecesidad>(entity =>
@@ -84,6 +88,9 @@ public partial class HackatecContext : DbContext
             entity.Property(e => e.Cct)
                 .HasMaxLength(10)
                 .HasColumnName("cct");
+            entity.Property(e => e.Contrasena)
+                .HasMaxLength(255)
+                .HasColumnName("contrasena");
             entity.Property(e => e.Direccion)
                 .HasMaxLength(255)
                 .HasColumnName("direccion");
