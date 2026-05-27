@@ -50,7 +50,7 @@ public partial class HackatecContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Contraseña).HasMaxLength(45);
-            entity.Property(e => e.Correo).HasMaxLength(45);
+            entity.Property(e => e.Usuario).HasMaxLength(30);
         });
 
         modelBuilder.Entity<ImagenesNecesidad>(entity =>

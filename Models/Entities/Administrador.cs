@@ -7,7 +7,7 @@ public partial class Administrador
 {
     public int Id { get; set; }
 
-    public string Correo { get; set; } = null!;
+    public string Usuario { get; set; } = null!;
 
     public string Contraseña { get; set; } = null!;
 }
