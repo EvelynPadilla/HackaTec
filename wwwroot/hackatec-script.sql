@@ -1,3 +1,4 @@
+
 CREATE DATABASE Hackatec;
 USE Hackatec;
 
@@ -84,7 +85,7 @@ nombre varchar(80) not null,
 contrasena varchar(255) not null
 );
 
-
+insert into Administrador(nombre,contrasena) values("Admin","Admin");
 
 -- Trigger Institucion
 DELIMITER //
@@ -92,6 +93,6 @@ DROP TRIGGER IF EXISTS `hackatec`.`instituciones_educativas_AFTER_INSERT`//
 
 CREATE DEFINER = CURRENT_USER TRIGGER `hackatec`.`instituciones_educativas_AFTER_INSERT` AFTER INSERT ON `instituciones_educativas` FOR EACH ROW
 BEGIN
-	insert into usuarios(nombre, correo, contrasena_hash, telefono, rol) values(new.nombre, new.cct, new.contrasena, new.telefono_escuela, "Institución");
-END
+	insert into usuario(nombre, correo, contrasena_hash, telefono, rol) values(new.nombre, new.cct, new.contrasena, new.telefono_escuela, "Institución");
+END //
 DELIMITER ;
