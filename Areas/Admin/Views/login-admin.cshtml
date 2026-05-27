@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model HackaTec.Areas.Admin.ViewModels.LoginAdminVioewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -17,7 +19,7 @@
                     <p style="color: var(--gray); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Módulo de Administración Seguro</p>
                 </div>
 
-                <form action="admin-gie.html" method="POST">
+                <form action="Admin" method="POST">
 
                     <div class="form-group">
                         <label for="admin-user">Usuario / Correo de Administrador *</label>
