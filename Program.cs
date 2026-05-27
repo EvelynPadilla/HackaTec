@@ -18,6 +18,8 @@ builder.Services.AddDbContext<HackatecContext>();
 
 builder.Services.AddScoped(typeof(Repository<>), typeof(Repository<>));
 builder.Services.AddScoped<AdminService>();
+builder.Services.AddScoped<FeedService>();
+
 
 var app = builder.Build();
 
