@@ -1,0 +1,83 @@
+﻿
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control GIE - Admin</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="navbar__brand">🔒 Panel Administrador (GIE)</div>
+            <ul class="navbar__menu">
+                <li><a href="#" class="navbar__link">Escuelas</a></li>
+                <li><a href="#" class="navbar__link">Salir</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div class="card">
+                <h3>Dar de Alta Nueva Institución Educativa (Validación Offline)</h3>
+                <br>
+                <form id="form-gie">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div class="form-group">
+                            <label>Nombre de la Escuela *</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Clave Centro de Trabajo (CCT) *</label>
+                            <input type="text" class="form-control" minlength="10" maxlength="10" placeholder="Ej. 05EPR0123X" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Dirección de la Escuela *</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Persona Responsable *</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono de la Escuela *</label>
+                            <input type="tel" class="form-control" minlength="10" maxlength="10" pattern="[0-9]{10}" placeholder="10 dígitos numéricos" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono de la Persona Responsable *</label>
+                            <input type="tel" class="form-control" minlength="10" maxlength="10" pattern="[0-9]{10}" placeholder="10 dígitos numéricos" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn--success">Registrar y Activar Escuela</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Instituciones Registradas</h3>
+                <br>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>CCT</th>
+                                <th>Nombre</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>05EPR0123X</td>
+                                <td>Esc. Primaria Benito Juárez</td>
+                                <td><span class="badge-status badge-status--activo">Activo</span></td>
+                                <td><button class="btn btn--danger" onclick="confirm('¿Seguro que desea aplicar Baja Lógica a esta institución?')">Desactivar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+
