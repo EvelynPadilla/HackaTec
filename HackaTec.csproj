@@ -9,11 +9,9 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Donante\Models\" />
-<<<<<<< HEAD
-    <Folder Include="Areas\Institucion\Controllers\" />
-=======
     <Folder Include="Areas\Donante\Controllers\" />
->>>>>>> b197444bbc01f525a1b3c9a5a548116ceb9c23c1
+    <Folder Include="Areas\Institucion\Controllers\" />
+    <Folder Include="Areas\Institucion\Controllers\" />
     <Folder Include="Areas\Institucion\Models\" />
     <Folder Include="Areas\repositories\" />
   </ItemGroup>
