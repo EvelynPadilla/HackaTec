@@ -332,3 +332,23 @@
         .admin-table th {
             background: var(--light);
         }
+/* --- Modificaciones para el Brand con Logo y Título --- */
+.navbar__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Espaciado perfecto entre el logo y el texto */
+}
+
+.navbar__logo {
+    height: 40px; /* Altura fija ideal para que no deforme la navbar */
+    width: auto; /* Mantiene la proporción original de tu imagen */
+    object-fit: contain;
+    display: block;
+}
+
+.navbar__title {
+    font-weight: bold;
+    font-size: 1.4rem; /* Tamaño destacado para las siglas del proyecto */
+    letter-spacing: 0.5px;
+    color: var(--white);
+}
