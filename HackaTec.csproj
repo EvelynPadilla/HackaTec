@@ -13,8 +13,6 @@
     <Folder Include="Areas\Institucion\Controllers\" />
     <Folder Include="Areas\Institucion\Models\" />
     <Folder Include="Areas\repositories\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>
