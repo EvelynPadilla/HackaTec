@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed de Necesidades - Mi-Proyecto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="navbar__brand">🌱 Mi-Proyecto</div>
+            <div class="navbar__nav-group">
+                <ul class="navbar__menu">
+                    <li><a href="feed.html" class="navbar__link">Feed</a></li>
+                    <li><a href="chat.html" class="navbar__link">Mensajes <span class="badge">1</span></a></li>
+                    <li><a href="perfil-donante.html" class="navbar__link">Mi Perfil</a></li>
+                    <li><a href="login.html" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión 🚪</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <section class="search-container">
+                <form action="#" method="GET" class="search-box">
+                    <input type="text" class="form-control" placeholder="Buscar por material (ej: pintura, tubos) o nombre de escuela..." aria-label="Buscador de necesidades">
+                    <button type="submit" class="btn btn--primary">Buscar</button>
+                </form>
+            </section>
+
+            <section class="feed">
+                <article class="card post">
+                    <div class="post__header">
+                        <span>Escuela Primaria Benito Juárez (CCT: 05EPR0123X)</span>
+                        <span>Hace 10 min</span>
+                    </div>
+                    <h2 class="post__title">Falta de pintura acrílica para fachadas de salones</h2>
+                    <p class="post__content">Tenemos 3 salones vandalizados debido a las lluvias y graffitis. Requerimos aproximadamente 2 o 3 cubetas de pintura acrílica blanca o azul que les haya sobrado de sus construcciones.</p>
+                    <div class="post__images">
+                        <img src="https://via.placeholder.com/300" alt="Evidencia" class="post__img">
+                    </div>
+                    <div class="text-right">
+                        <a href="chat.html?post_id=101" class="btn btn--primary">Quiero Donar</a>
+                    </div>
+                </article>
+
+                <article class="card post post--cubierto">
+                    <div class="post__header">
+                        <span>Kinder Justo Sierra</span>
+                        <span>Ayer</span>
+                        <span class="badge-status badge-status--cubierto">Cubierto</span>
+                    </div>
+                    <h2 class="post__title">Se solicitan tubos PVC para drenaje de patio</h2>
+                    <p class="post__content">Buscamos tramos de tubo de 4 pulgadas para canalizar el agua del patio escolar.</p>
+
+                    <div class="card post post--thanks thread">
+                        <div class="post__header">
+                            <span>❤️ ¡Gracias a @JuanPerez!</span>
+                            <span>Hace 2 horas</span>
+                        </div>
+                        <p>Queremos agradecer profundamente al donante Carlos Mendoza por hacernos llegar los 3 tubos de PVC...</p>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

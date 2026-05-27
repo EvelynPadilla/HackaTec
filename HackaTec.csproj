@@ -15,7 +15,6 @@
     <Folder Include="Areas\repositories\" />
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
   <ItemGroup>
