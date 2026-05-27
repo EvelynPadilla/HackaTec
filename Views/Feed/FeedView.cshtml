@@ -11,6 +11,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feed de Necesidades - LAZO</title>
     <link rel="stylesheet" href="~/styles.css">
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active { background: var(--primary); color: white; border-bottom: 2px solid var(--primary-dark); }
+        .tabs-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { padding: 8px 16px; background: #f1f5f9; border: none; border-radius: 8px; cursor: pointer; }
+        .tab-btn:hover { background: #e2e8f0; }
+        .post__img { max-width: 100%; border-radius: 8px; }
+        .badge-status--cubierto { background: #10b981; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; }
+        .text-right { text-align: right; margin-top: 10px; }
+    </style>
 </head>
 <body>
     <div class="app-container">
@@ -21,91 +32,111 @@
             </div>
             <div class="navbar__nav-group">
                 <ul class="navbar__menu">
-                    <li><a href="chat.html" class="navbar__link">Mensajes</a></li>
-                    <li><a href="perfil-donante.html" class="navbar__link">Mi Perfil</a></li>
-                    <li><a href="login.html" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión 🚪</a></li>
+                    <li><a href="@Url.Action("List", "Chat")" class="navbar__link">Mensajes</a></li>
+                    <li><a href="@Url.Action("Perfil", "Donante")" class="navbar__link">Mi Perfil</a></li>
+                    <li><a href="@Url.Action("Logout", "Account", new { area = "Donante" })" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión 🚪</a></li>
                 </ul>
             </div>
         </nav>
 
         <main class="main-content">
             <section class="search-container">
-                <form action="#" method="GET" class="search-box">
-                    <input type="text" class="form-control" placeholder="Buscar por material (ej: pintura, tubos) o nombre de escuela..." aria-label="Buscador de necesidades">
+                <form method="get" asp-action="Feed" asp-controller="Feed" class="search-box">
+                    <input type="text" name="search" class="form-control" value="@Model.BarraBusqueda" placeholder="Buscar por material (ej: pintura, tubos) o nombre de escuela..." aria-label="Buscador de necesidades">
                     <button type="submit" class="btn btn--primary">Buscar</button>
                 </form>
             </section>
 
             <div class="tabs-container">
-       
-                <button class="tab-btn" onclick="switchTab(event, 'feed-necesidades')">📑 Necesidades</button>
+                <button class="tab-btn active" onclick="switchTab(event, 'feed-necesidades')">📑 Necesidades</button>
                 <button class="tab-btn" onclick="switchTab(event, 'feed-agradecimientos')">❤️ Agradecimientos</button>
             </div>
 
-            
-
-            <div id="feed-necesidades" class="tab-content">
+            <!-- Tab de Necesidades -->
+            <div id="feed-necesidades" class="tab-content active">
                 <section class="feed">
-                    <article class="card post">
-                        <div class="post__header">
-                            <span>Escuela Primaria Benito Juárez (CCT: 05EPR0123X)</span>
-                            <span>Hace 10 min</span>
-                        </div>
-                        <h2 class="post__title">Falta de pintura acrílica para fachadas de salones</h2>
-                        <p class="post__content">Tenemos 3 salones vandalizados debido a las lluvias y graffitis. Requerimos aproximadamente 2 o 3 cubetas de pintura acrílica blanca o azul que les haya sobrado de sus construcciones.</p>
-                        <div class="post__images">
-                            <img src="https://via.placeholder.com/300" alt="Evidencia" class="post__img">
-                        </div>
-                        <div class="text-right">
-                            <a href="chat.html?post_id=101" class="btn btn--primary">Quiero Donar</a>
-                        </div>
-                    </article>
-
-                    <article class="card post post--cubierto">
-                        <div class="post__header">
-                            <span>Kinder Justo Sierra</span>
-                            <span>Ayer</span>
-                            <span class="badge-status badge-status--cubierto">Cubierto</span>
-                        </div>
-                        <h2 class="post__title">Se solicitan tubos PVC para drenaje de patio</h2>
-                        <p class="post__content">Buscamos tramos de tubo de 4 pulgadas para canalizar el agua del patio escolar.</p>
-                    </article>
+                    @if (!Model.Publicaciones.Any())
+                    {
+                        <div class="card">No hay publicaciones de necesidad que coincidan con tu búsqueda.</div>
+                    }
+                    else
+                    {
+                        @foreach (var necesidad in Model.Publicaciones)
+                        {
+                            <article class="card post @(necesidad.Estado == true ? "post--cubierto" : "")">
+                                <div class="post__header">
+                                    <span>Institución ID: @necesidad.IdInstitucion</span>
+                                    <span>@(necesidad.Fecha?.ToString("dd/MM/yyyy HH:mm") ?? "Fecha no disponible")</span>
+                                    @if (necesidad.Estado == true)
+                                    {
+                                        <span class="badge-status badge-status--cubierto">Cubierto</span>
+                                    }
+                                </div>
+                                <h2 class="post__title">@necesidad.Titulo</h2>
+                                <p class="post__content">@necesidad.Descripcion</p>
+                                @if (false)  // si agregas RutaImagen en el ViewModel
+                                {
+                                    <div class="post__images">
+                                        <img src=" alt="Evidencia" class="post__img">
+                                    </div>
+                                }
+                                <div class="text-right">
+                                    <form method="post" action="@Url.Action("Start", "Chat")">
+                                        <input type="hidden" name="idInstitucion" value="@necesidad.IdInstitucion" />
+                                        <input type="hidden" name="idPostNecesidad" value="@necesidad.Id" />
+                                        <button type="submit" class="btn btn--primary">Quiero Donar</button>
+                                    </form>
+                                </div>
+                            </article>
+                        }
+                    }
                 </section>
             </div>
 
+            <!-- Tab de Agradecimientos -->
             <div id="feed-agradecimientos" class="tab-content">
                 <section class="feed">
-                    <div class="card post post--thanks">
-                        <div class="post__header">
-                            <span>Kinder Justo Sierra</span>
-                            <span>Ayer</span>
-                            <span style="font-weight: bold; color: var(--success);">❤️ Reconocimiento</span>
-                        </div>
-                        <h2 class="post__title" style="color: var(--success);">¡Gracias a JuanPerez!</h2>
-                        <p class="post__content">Queremos agradecer profundamente al donante Carlos Mendoza por hacernos llegar de forma altruista los 3 tubos de PVC para solucionar el problema del drenaje del patio escolar.</p>
-                    </div>
+                    @if (!Model.PublicacionesAgradecimiento.Any())
+                    {
+                        <div class="card">No hay publicaciones de agradecimiento que coincidan con tu búsqueda.</div>
+                    }
+                    else
+                    {
+                        @foreach (var agradecimiento in Model.PublicacionesAgradecimiento)
+                        {
+                            <div class="card post post--thanks">
+                                <div class="post__header">
+                                    <span>Donante ID: @agradecimiento.IdUsuarioDonante</span>
+                                    <span>@(agradecimiento.Fecha?.ToString("dd/MM/yyyy HH:mm") ?? "Fecha no disponible")</span>
+                                    <span style="font-weight: bold; color: var(--success);">❤️ Reconocimiento</span>
+                                </div>
+                                <h2 class="post__title" style="color: var(--success);">¡Gracias al donante!</h2>
+                                <p class="post__content">@agradecimiento.Descripcion</p>
+                                @if (!string.IsNullOrEmpty(agradecimiento.RutaFotografia))
+                                {
+                                    <div class="post__images">
+                                        <img src="@agradecimiento.RutaFotografia" alt="Evidencia" class="post__img">
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
                 </section>
             </div>
-
         </main>
     </div>
 
     <script>
-            function switchTab(event, tabId) {
-                // Ocultar todos los bloques de contenido del feed
-                const contents = document.querySelectorAll('.tab-content');
-                contents.forEach(content => content.classList.remove('active'));
+        function switchTab(event, tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
 
-                // Quitar el estado activo a los botones de pestañas
-                const buttons = document.querySelectorAll('.tab-btn');
-                buttons.forEach(btn => btn.classList.remove('active'));
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
 
-                // Mostrar el contenedor de la pestaña seleccionada
-                document.getElementById(tabId).classList.add('active');
-
-                // Marcar el botón actual con la barra inferior del CSS
-                event.currentTarget.classList.add('active');
-            }
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
     </script>
 </body>
 </html>

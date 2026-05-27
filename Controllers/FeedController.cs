@@ -9,19 +9,23 @@ namespace HackaTec.Controllers
     public class FeedController : Controller
     {
         private readonly FeedService feedService;
+
         public FeedController(FeedService feedService)
         {
             this.feedService = feedService;
         }
+
         [HttpGet]
-        public IActionResult Feed()
+        public IActionResult Feed(string? search)
         {
             FeedViewModel vm = new FeedViewModel();
-            var search = vm.BarraBusqueda;
+            vm.BarraBusqueda = search;
+
+            // Cargar necesidades (Publicaciones)
             if (!string.IsNullOrEmpty(search))
             {
-                var publicacionesFiltradas = feedService.ObtenerPublicacionesNecesidadPorTitulo(search);
-                vm.Publicaciones = publicacionesFiltradas.Select(p => new PublicacionesViewModel
+                var necesidadesFiltradas = feedService.ObtenerPublicacionesNecesidadPorTitulo(search);
+                vm.Publicaciones = necesidadesFiltradas.Select(p => new PublicacionesViewModel
                 {
                     Id = p.Id,
                     Titulo = p.Titulo,
@@ -29,12 +33,23 @@ namespace HackaTec.Controllers
                     Fecha = p.Fecha,
                     IdInstitucion = p.IdInstitucion,
                     Estado = p.Estado
+                }).ToList();
+
+                var agradecimientosFiltrados = feedService.ObtenerPublicacionesAgradecimientoPorTitulo(search);
+                vm.PublicacionesAgradecimiento = agradecimientosFiltrados.Select(a => new PublicacionesAgradecimientoViewModel
+                {
+                    Id = a.Id,
+                    Descripcion = a.Descripcion,
+                    Fecha = a.Fecha,
+                    IdPublicacionNecesidad = a.IdPublicacionNecesidad,
+                    IdUsuarioDonante = a.IdUsuarioDonante,
+                    RutaFotografia = a.RutaFotografia
                 }).ToList();
             }
             else
             {
-                var publicacionesNecesidad = feedService.ObtenerPublicacionesNecesidad();
-                vm.Publicaciones = publicacionesNecesidad.Select(p => new PublicacionesViewModel
+                var necesidades = feedService.ObtenerPublicacionesNecesidad();
+                vm.Publicaciones = necesidades.Select(p => new PublicacionesViewModel
                 {
                     Id = p.Id,
                     Titulo = p.Titulo,
@@ -43,49 +58,35 @@ namespace HackaTec.Controllers
                     IdInstitucion = p.IdInstitucion,
                     Estado = p.Estado
                 }).ToList();
+
+                var agradecimientos = feedService.ObtenerPublicacionesAgradecimiento();
+                vm.PublicacionesAgradecimiento = agradecimientos.Select(a => new PublicacionesAgradecimientoViewModel
+                {
+                    Id = a.Id,
+                    Descripcion = a.Descripcion,
+                    Fecha = a.Fecha,
+                    IdPublicacionNecesidad = a.IdPublicacionNecesidad,
+                    IdUsuarioDonante = a.IdUsuarioDonante,
+                    RutaFotografia = a.RutaFotografia
+                }).ToList();
             }
+
             return View("FeedView", vm);
         }
+
         [HttpGet]
-        public IActionResult FeedAgradecimiendos()
+        public IActionResult FeedAgradecimientos(string? search)
         {
-            FeedViewModel vm = new FeedViewModel();
-            var search = vm.BarraBusqueda;
-            if (!string.IsNullOrEmpty(search))
-            {
-                var publicacionesFiltradas = feedService.ObtenerPublicacionesAgradecimientoPorTitulo(search);
-                vm.PublicacionesAgradecimiento = publicacionesFiltradas.Select(p => new PublicacionesAgradecimientoViewModel
-                {
-                    Id = p.Id,
-                    Descripcion = p.Descripcion,
-                    Fecha = p.Fecha,
-                    IdPublicacionNecesidad = p.IdPublicacionNecesidad,
-                    IdUsuarioDonante = p.IdUsuarioDonante,
-                    RutaFotografia = p.RutaFotografia
-                }).ToList();
-            }
-            else
-            {
-                var publicacionesAgradecimiento = feedService.ObtenerPublicacionesAgradecimiento();
-                vm.PublicacionesAgradecimiento = publicacionesAgradecimiento.Select(p => new PublicacionesAgradecimientoViewModel
-                {
-                    Id = p.Id,
-                    Descripcion = p.Descripcion,
-                    Fecha = p.Fecha,
-                    IdPublicacionNecesidad = p.IdPublicacionNecesidad,
-                    IdUsuarioDonante = p.IdUsuarioDonante,
-                    RutaFotografia = p.RutaFotografia
-                }).ToList();
-            }
-            return View(vm);
+            // Este método puede ser eliminado si usas la vista unificada.
+            // Pero lo dejamos por si lo necesitas para otros fines.
+            return RedirectToAction("Feed", new { search });
         }
-
-
 
         [HttpPost]
         public IActionResult Feed(FeedViewModel vm)
         {
-            return View();
+            // Redirige a GET para evitar reenvío de formulario
+            return RedirectToAction("Feed", new { search = vm.BarraBusqueda });
         }
     }
 }
