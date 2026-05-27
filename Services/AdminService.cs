@@ -51,6 +51,7 @@ namespace HackaTec.Services
         {
             return repoEscuelas.GetAll().Select(e => new IndexViewModel
             {
+                Id = e.Id,
                 CCT = e.Cct,
                 NombreEscuela = e.Nombre,
                 Estado = e.Estado ?? true // Manejo de nulos por seguridad

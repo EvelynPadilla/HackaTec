@@ -1,5 +1,6 @@
 ﻿using HackaTec.Models.ViewModels;
 using HackaTec.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HackaTec.Controllers

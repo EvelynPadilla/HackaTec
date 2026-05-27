@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
 namespace HackaTec.Areas.Admin.ViewModels
 {
     public class IndexViewModel
     {
+        public int Id { get; set; }
         public string NombreEscuela { get; set; } = null!;
         public string CCT { get; set; } = null!;
         public bool Estado { get; set; }
