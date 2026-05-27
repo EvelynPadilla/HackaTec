@@ -11,11 +11,11 @@ namespace HackaTec.Controllers
         {
             this.feedService = feedService;
         }
-
+        [HttpGet]
         public IActionResult Feed()
         {
             FeedViewModel vm = new FeedViewModel();
-            return View(vm);
+            return View("FeedView", vm);   
         }
 
         [HttpPost]
@@ -25,11 +25,10 @@ namespace HackaTec.Controllers
             var publicacionesNecesidad = feedService.ObtenerPublicacionesNecesidad();
             vm.Publicaciones = publicacionesAgradecimiento.Select(p => new PublicacionesViewModel
             {
-                Id = p.Id,           
+                Id = p.Id,
                 Descripcion = p.Descripcion,
                 Tipo = "Agradecimiento",
-                FechaPublicacion = p.Fecha??DateTime.Now,
-
+                FechaPublicacion = p.Fecha ?? DateTime.Now,
             }).ToList();
             vm.Publicaciones.AddRange(publicacionesNecesidad.Select(p => new PublicacionesViewModel
             {
@@ -37,10 +36,11 @@ namespace HackaTec.Controllers
                 Titulo = p.Titulo,
                 Descripcion = p.Descripcion,
                 Tipo = "Necesidad",
-                FechaPublicacion = p.Fecha??DateTime.Now,
+                FechaPublicacion = p.Fecha ?? DateTime.Now,
             }));
             vm.Publicaciones = vm.Publicaciones.OrderByDescending(p => p.FechaPublicacion).ToList();
-            return View(vm);
+
+            return View("FeedView", vm);   // ← también aquí
         }
     }
 }
