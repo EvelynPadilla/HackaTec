@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+}
+@model HackaTec.Areas.Donante.ViewModels.LoginDonanteViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -16,16 +21,26 @@
                     <p style="color: var(--gray); font-size: 0.9rem;">Apoya a la infraestructura escolar</p>
                 </div>
 
-                <form action="feed.html" method="POST">
+                @if (ViewBag.MostrarError == true)
+                {
+                    <div class="alert alert-error" style="background:#fee2e2; color:#b91c1c; padding:0.75rem; border-radius:6px; margin-bottom:1rem;">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                }
+
+                <form asp-area="Donante" asp-controller="Account" asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
 
                     <div class="form-group">
-                        <label for="donante-email">Correo Electrónico *</label>
-                        <input type="email" id="donante-email" class="form-control" placeholder="ejemplo@correo.com" required autocomplete="email">
+                        <label asp-for="Correo">Correo Electrónico *</label>
+                        <input asp-for="Correo" class="form-control" type="email" placeholder="ejemplo@correo.com" required autocomplete="email">
+                        <span asp-validation-for="Correo" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
 
                     <div class="form-group">
-                        <label for="donante-password">Contraseña *</label>
-                        <input type="password" id="donante-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+                        <label asp-for="ContrasenaHash">Contraseña *</label>
+                        <input asp-for="ContrasenaHash" class="form-control" type="password" placeholder="••••••••" required autocomplete="current-password">
+                        <span asp-validation-for="ContrasenaHash" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
 
                     <div style="margin-bottom: 1.5rem; text-align: right;">
@@ -40,15 +55,19 @@
                 <div style="margin-top: 1.5rem; text-align: center; border-top: 1px solid var(--light); padding-top: 1rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem;">
                     <div>
                         <span style="color: var(--dark);">¿No tienes cuenta?</span>
-                        <a href="registro-donante.html" style="color: var(--primary-light); font-weight: bold; text-decoration: none;">Regístrate aquí</a>
+                        <a asp-area="Donante" asp-controller="Account" asp-action="Registrar" style="color: var(--primary-light); font-weight: bold; text-decoration: none;">Regístrate aquí</a>
                     </div>
                     <div style="margin-top: 0.5rem;">
-                        <a href="login.html" style="color: var(--gray); text-decoration: none;">¿Eres una Escuela? Entra aquí</a>
+                        <a href="#" style="color: var(--gray); text-decoration: none;">¿Eres una Escuela? Entra aquí</a>
                     </div>
                 </div>
 
             </div>
         </main>
     </div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
 </body>
 </html>

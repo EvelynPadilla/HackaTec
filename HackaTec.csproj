@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Donante\Models\" />
-    <Folder Include="Areas\Donante\Controllers\" />
     <Folder Include="Areas\Institucion\Controllers\" />
     <Folder Include="Areas\Institucion\Models\" />
     <Folder Include="Areas\repositories\" />

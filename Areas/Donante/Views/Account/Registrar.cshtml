@@ -1,0 +1,83 @@
+﻿@{
+    Layout = null;
+}
+@model HackaTec.Areas.Donante.ViewModels.RegistroDonanteViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Donante - Mi-Proyecto</title>
+    <link rel="stylesheet" href="~/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <main class="main-content" style="max-width: 500px; margin-top: 3rem;">
+            <div class="card">
+                <h2 style="margin-bottom: 1.5rem; text-align: center; color: var(--primary);">Únete a la Comunidad</h2>
+                
+                @if (ViewBag.MostrarError == true)
+                {
+                    <div class="alert alert-error" style="background:#fee2e2; color:#b91c1c; padding:0.75rem; border-radius:6px; margin-bottom:1rem;">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                }
+
+                <form asp-area="Donante" asp-controller="Account" asp-action="Registrar" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <label asp-for="Nombre">Nombre(s) *</label>
+                        <input asp-for="Nombre" class="form-control" required>
+                        <span asp-validation-for="Nombre" class="text-danger" style="font-size:0.8rem;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Apellidos">Apellidos *</label>
+                        <input asp-for="Apellidos" class="form-control" required>
+                        <span asp-validation-for="Apellidos" class="text-danger" style="font-size:0.8rem;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Telefono">Teléfono (10 dígitos) *</label>
+                        <input asp-for="Telefono" class="form-control" placeholder="5512345678" pattern="[0-9]{10}" required>
+                        <span asp-validation-for="Telefono" class="text-danger" style="font-size:0.8rem;"></span>
+                        <span class="form-error">Debe contener exactamente 10 números.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Correo">Correo Electrónico *</label>
+                        <input asp-for="Correo" class="form-control" type="email" required>
+                        <span asp-validation-for="Correo" class="text-danger" style="font-size:0.8rem;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ContrasenaHash">Contraseña *</label>
+                        <input asp-for="ContrasenaHash" class="form-control" type="password" required>
+                        <span asp-validation-for="ContrasenaHash" class="text-danger" style="font-size:0.8rem;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="FotoPerfil">Foto de Perfil (Opcional - Máx. 5MB)</label>
+                        <input asp-for="FotoPerfil" class="form-control" type="file" accept=".jpg,.jpeg,.png">
+                        <span asp-validation-for="FotoPerfil" class="text-danger" style="font-size:0.8rem;"></span>
+                    </div>
+
+                    <input type="hidden" asp-for="Rol" value="Donante" />
+
+                    <button type="submit" class="btn btn--primary btn--block">Crear Cuenta</button>
+                </form>
+
+                <div style="text-align: center; margin-top: 1rem;">
+                    ¿Ya tienes cuenta? <a asp-area="Donante" asp-controller="Account" asp-action="Login">Iniciar sesión</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>

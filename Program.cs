@@ -21,6 +21,7 @@ builder.Services.AddScoped(typeof(Repository<>), typeof(Repository<>));
 builder.Services.AddScoped<AdminService>();
 builder.Services.AddScoped<FeedService>();
 builder.Services.AddScoped<ChatService>();
+builder.Services.AddScoped<DonantesService>();
 builder.Services.AddSignalR();
 
 
