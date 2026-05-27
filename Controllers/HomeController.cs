@@ -6,10 +6,7 @@ namespace HackaTec.Controllers
     {
         public IActionResult Index()
         {
-            // Opción 1: Redirigir al área Admin
             return RedirectToAction("Feed", "Feed");
-
-
         }
     }
 }
