@@ -1,3 +1,4 @@
+using HackaTec.Hubs;
 using HackaTec.Models.Entities;
 using HackaTec.Repositories;
 using HackaTec.Services;
@@ -19,6 +20,8 @@ builder.Services.AddDbContext<HackatecContext>();
 builder.Services.AddScoped(typeof(Repository<>), typeof(Repository<>));
 builder.Services.AddScoped<AdminService>();
 builder.Services.AddScoped<FeedService>();
+builder.Services.AddScoped<ChatService>();
+builder.Services.AddSignalR();
 
 
 var app = builder.Build();
@@ -36,5 +39,7 @@ app.MapControllerRoute(
 );
 
 app.MapDefaultControllerRoute();
+
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

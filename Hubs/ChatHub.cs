@@ -1,59 +1,64 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using HackaTec.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
 using System.Security.Claims;
 
 namespace HackaTec.Hubs
 {
-    [Authorize] // 🔐 Protege el Hub, solo usuarios autenticados pueden conectar
+    [Authorize]
     public class ChatHub : Hub
     {
-        // Diccionario en memoria para almacenar la relación UserId -> ConnectionId(s)
-        // NOTA: Esto no escala en web farms. Para producción, usa una caché distribuida (Redis) o una DB.
-        private static readonly ConcurrentDictionary<string, List<string>> _userConnections = new();
+        private readonly ChatService _chatService;
 
-        // Este método se llama automáticamente cuando un cliente se conecta
-        public override async Task OnConnectedAsync()
+        public ChatHub(ChatService chatService)
         {
-            var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId != null)
-            {
-                // Añade la nueva connectionId a la lista del usuario
-                _userConnections.AddOrUpdate(userId,
-                    new List<string> { Context.ConnectionId },
-                    (key, existingList) => { existingList.Add(Context.ConnectionId); return existingList; });
-            }
-            await base.OnConnectedAsync();
+            _chatService = chatService;
         }
 
-        // Se llama cuando un cliente se desconecta
-        public override async Task OnDisconnectedAsync(Exception? exception)
+        public async Task JoinRoom(int idSala)
         {
-            var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId != null && _userConnections.TryGetValue(userId, out var connections))
-            {
-                connections.Remove(Context.ConnectionId);
-                if (connections.Count == 0)
-                    _userConnections.TryRemove(userId, out _);
-            }
-            await base.OnDisconnectedAsync(exception);
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"room_{idSala}");
         }
 
-        // 📨 Método para enviar un mensaje a un usuario específico
-        public async Task SendPrivateMessage(string receiverId, string message)
+        public async Task LeaveRoom(int idSala)
         {
-            var senderId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(senderId)) return;
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"room_{idSala}");
+        }
 
-            // Busca todas las conexiones activas del destinatario
-            if (_userConnections.TryGetValue(receiverId, out var receiverConnections))
+        public async Task SendMessageToRoom(int idSala, string contenido, string? rutaImagen = null)
+        {
+            var userIdClaim = Context.User?.FindFirst(ClaimTypes.NameIdentifier);
+            var userTypeClaim = Context.User?.FindFirst("UserType");
+
+            if (userIdClaim == null || userTypeClaim == null) return;
+
+            int idRemitente = int.Parse(userIdClaim.Value);
+            string remitenteTipo = userTypeClaim.Value;
+
+            // Validar que el usuario pertenece a la sala
+            bool isValid = await _chatService.IsUserInRoomAsync(idSala, idRemitente, remitenteTipo);
+            if (!isValid) return;
+
+            // Guardar mensaje en BD
+            var mensaje = await _chatService.SaveMessageAsync(idSala, remitenteTipo, idRemitente, contenido, rutaImagen);
+
+            // Enviar a todos los miembros de la sala
+            await Clients.Group($"room_{idSala}").SendAsync("ReceiveMessage", new
             {
-                // Envía el mensaje a cada una de las conexiones del usuario destinatario
-                await Clients.Clients(receiverConnections).SendAsync("ReceivePrivateMessage", senderId, message);
-            }
+                mensaje.Id,
+                mensaje.RemitenteTipo,
+                mensaje.IdRemitente,
+                mensaje.Contenido,
+                mensaje.RutaImagen,
+                FechaEnvio = mensaje.FechaEnvio,
+                mensaje.EstadoLeido
+            });
+        }
 
-            // (Opcional) También podrías confirmar al remitente que el mensaje fue enviado
-            // await Clients.Caller.SendAsync("MessageSentConfirmation", receiverId, message);
+        public async Task UserTyping(int idSala, bool isTyping)
+        {
+            await Clients.OthersInGroup($"room_{idSala}").SendAsync("UserTyping", isTyping);
         }
     }
 }
