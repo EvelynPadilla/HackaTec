@@ -1,4 +1,4 @@
-﻿body {
+﻿
     /* ==========================================
    SISTEMA DE DISEÑO & VARIABLES (styles.css)
    ========================================== */
@@ -332,4 +332,3 @@
         .admin-table th {
             background: var(--light);
         }
-}
