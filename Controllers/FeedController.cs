@@ -40,7 +40,7 @@ namespace HackaTec.Controllers
             }));
             vm.Publicaciones = vm.Publicaciones.OrderByDescending(p => p.FechaPublicacion).ToList();
 
-            return View("FeedView", vm);   // ← también aquí
+            return View("FeedView", vm); 
         }
     }
 }
