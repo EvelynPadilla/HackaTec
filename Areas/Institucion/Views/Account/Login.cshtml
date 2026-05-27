@@ -20,7 +20,7 @@
                     <p style="color: var(--gray); font-size: 0.9rem;">Acceso para Escuelas y Donantes</p>
                 </div>
 
-                <form action="Institucion/Account/Login" method="POST">
+                <form asp-action="Login" asp-controller="Account" asp-area="Institucion" method="POST">
                     <div class="form-group">
                         <label for="usuario">Clave CCT</label>
                         <input asp-for="Correo_CCT" type="text" class="form-control" placeholder="Ej: 05EPR0123X" required>

@@ -16,7 +16,7 @@ namespace HackaTec.Services
         }
         public Administrador? Login(LoginAdminVioewModel model)
         {
-            var admin = repoUser.GetAll().FirstOrDefault(a => a.Usuario == model.Usuario && a.Contraseña == model.Contraseña);
+            var admin = repoUser.GetAll().FirstOrDefault(a => a.Nombre == model.Usuario && a.Contrasena == model.Contraseña);
 
             return admin;
         }

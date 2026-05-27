@@ -11,7 +11,6 @@ namespace HackaTec.Areas.Admin.Controllers
     public class AccountController : Controller
     {
         private readonly AdminService adminService;
-
         public AccountController(AdminService adminService)
         {
             this.adminService = adminService;
@@ -32,14 +31,14 @@ namespace HackaTec.Areas.Admin.Controllers
                 ModelState.AddModelError("", "Contraseña o Nickname incorrectos");
                 return View(model);
             }
-            else if (admin.Usuario != null)
+            else if (admin.Nombre != null)
             {
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier,
                     admin.Id.ToString()),
                     new Claim(ClaimTypes.Name,
-                        admin.Usuario)
+                        admin.Nombre)
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

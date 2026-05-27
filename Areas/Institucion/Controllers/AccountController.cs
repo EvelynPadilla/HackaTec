@@ -1,4 +1,5 @@
 ﻿using HackaTec.Areas.Admin.ViewModels;
+using HackaTec.Areas.Institucion.ViewModels;
 using HackaTec.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 
 namespace HackaTec.Areas.Institucion.Controllers
 {
+    [Area("Institucion")]
     public class AccountController : Controller
     {
         private readonly InstitucionService institucionService;
@@ -21,45 +23,45 @@ namespace HackaTec.Areas.Institucion.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Login(LoginAdminVioewModel model)
-        //{
-        //    var institucion = institucionService.Login(model);
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginInstitucionesViewModel model)
+        {
+            var institucion = institucionService.Login(model);
 
-        //    if (institucion == null)
-        //    {
-        //        ModelState.AddModelError("", "Contraseña o Nickname incorrectos");
-        //        return View(model);
-        //    }
-        //    else if (institucion.Usuario != null)
-        //    {
-        //        var claims = new List<Claim>
-        //        {
-        //            new Claim(ClaimTypes.NameIdentifier,
-        //            institucion.Id.ToString()),
-        //            new Claim(ClaimTypes.Name,
-        //                institucion.Usuario)
-        //        };
+            if (institucion == null)
+            {
+                ModelState.AddModelError("", "Contraseña o CCT incorrectos");
+                return View(model);
+            }
+            else if (institucion != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier,
+                    institucion.Id.ToString()),
+                    new Claim(ClaimTypes.Name,
+                        institucion.Cct)
+                };
 
-        //        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-        //        var principal = new ClaimsPrincipal(identity);
+                var principal = new ClaimsPrincipal(identity);
 
-        //        await HttpContext.SignInAsync(principal);
+                await HttpContext.SignInAsync(principal);
 
-        //        return RedirectToAction("Index", "Home", new { area = "Admin" });
-        //    }
-        //    else
-        //    {
-        //        return View(model);
-        //    }
-        //}
+                return RedirectToAction("Index", "Home", new { area = "Institucion" });
+            }
+            else
+            {
+                return View(model);
+            }
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Logout()
-        //{
-        //    await HttpContext.SignOutAsync();
-        //    return RedirectToAction("Login", "Account");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
     }
 }
