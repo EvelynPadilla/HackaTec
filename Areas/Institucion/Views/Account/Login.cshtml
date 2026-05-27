@@ -1,7 +1,8 @@
-﻿@{
+﻿@model HackaTec.Areas.Institucion.ViewModels.LoginInstitucionesViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     Layout = null;
 }
-@model HackaTec.Areas.Institucion.ViewModels.LoginInstitucionesViewModel;
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,15 +20,15 @@
                     <p style="color: var(--gray); font-size: 0.9rem;">Acceso para Escuelas y Donantes</p>
                 </div>
 
-                <form action="feed.html" method="POST">
+                <form action="Institucion/Account/Login" method="POST">
                     <div class="form-group">
-                        <label for="usuario">Clave CCT / Correo Electrónico *</label>
-                        <input type="text" id="usuario" class="form-control" placeholder="Ej: 05EPR0123X o correo@email.com" required>
+                        <label for="usuario">Clave CCT</label>
+                        <input asp-for="Correo_CCT" type="text" class="form-control" placeholder="Ej: 05EPR0123X" required>
                     </div>
 
                     <div class="form-group">
                         <label for="password">Contraseña *</label>
-                        <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                        <input type="password" asp-for="Contrasena" class="form-control" placeholder="••••••••" required>
                     </div>
 
                     <div style="margin-bottom: 1.5rem; text-align: right;">

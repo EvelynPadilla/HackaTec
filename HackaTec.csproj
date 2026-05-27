@@ -13,6 +13,7 @@
     <Folder Include="Areas\Institucion\Controllers\" />
     <Folder Include="Areas\Institucion\Controllers\" />
     <Folder Include="Areas\Institucion\Models\" />
+    <Folder Include="Areas\Institucion\VIews\Home\" />
     <Folder Include="Areas\repositories\" />
   </ItemGroup>
 
