@@ -92,5 +92,28 @@ namespace HackaTec.Services
             };
             repoNecesidad.Insert(nuevaPublicacion);
         }
+        //Crear un agradecimiento:
+
+        public void CrearAgradecimiento(PublicacionesAgradecimientoViewModel model)
+
+        {
+
+            var nuevoAgradecimiento = new PublicacionesAgradecimiento
+
+            {
+
+                Descripcion = model.Descripcion,
+
+                IdPublicacionNecesidad = model.IdPublicacionNecesidad,
+
+                IdUsuarioDonante = model.IdUsuarioDonante,
+
+                RutaFotografia = model.RutaFotografia
+
+            };
+
+            repoAgradecimiento.Insert(nuevoAgradecimiento);
+
+        }
     }
 }

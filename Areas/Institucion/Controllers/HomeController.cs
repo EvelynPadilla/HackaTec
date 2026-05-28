@@ -112,7 +112,35 @@ namespace HackaTec.Areas.Institucion.Controllers
             // utilizando el servicio correspondiente.
             // Por ejemplo:
             // institucionService.GuardarAgradecimiento(model);
-            return RedirectToAction("Index");
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var publicacionNecesidad = institucionService.ObtenerPublicacionesNecesidad(model.IdPublicacionNecesidad).FirstOrDefault();
+
+                var institucion = institucionService.ObtenerPorId(publicacionNecesidad.IdInstitucion);
+                if (institucion == null)
+                {
+                    ModelState.AddModelError("", "Institución no encontrada");
+                    return View(model);
+                }
+
+                model.Fecha = DateTime.Now;
+
+                institucionService.CrearAgradecimiento(model);
+
+
+                TempData["SuccessMessage"] = "Agradecimiento publicado exitosamente";
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error al publicar el agradecimiento: {ex.Message}");
+                return View(model);
+            }
         }
     }
 }
