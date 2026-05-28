@@ -27,7 +27,7 @@ namespace HackaTec.Services
 
         public List<PublicacionesNecesidad> ObtenerPublicacionesNecesidad()
         {
-            var publicaciones = reposNecesidad.GetAll();
+            var publicaciones = reposNecesidad.GetAll().Where(p => p.Estado == true);
             return publicaciones.ToList();
         }
 
@@ -41,12 +41,12 @@ namespace HackaTec.Services
         {
             if (titulo != null)
             {
-                var publicaciones = reposNecesidad.GetAll().Where(p => p.Titulo.Contains(titulo));
+                var publicaciones = reposNecesidad.GetAll().Where(p => p.Titulo.Contains(titulo) && p.Estado == true);
                 return publicaciones.ToList();
             }
             else
             {
-                var publicaciones = reposNecesidad.GetAll();
+                var publicaciones = reposNecesidad.GetAll().Where(p => p.Estado == true);
                 return publicaciones.ToList();
             }
         }

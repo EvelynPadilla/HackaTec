@@ -17,9 +17,9 @@
             <div class="navbar__brand">🏫 Panel Escuela</div>
             <div class="navbar__nav-group">
                 <ul class="navbar__menu">
-                    <li><a href="feed.html" class="navbar__link">Ver Feed</a></li>
-                    <li><a href="perfil-escuela.html" class="navbar__link">Mi Historial</a></li>
-                    <li><a href="login.html" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la institución?')">Cerrar Sesión 🚪</a></li>
+                    <li><a asp-action="Feed" asp-controller="Feed" asp-area="" class="navbar__link">Ver Feed</a></li>
+                    <li><a asp-action="Index" asp-controller="Home" asp-area="Institucion" class="navbar__link">Mi Historial</a></li>
+                    <li><a asp-action="Logout" asp-controller="Account" asp-area="Donante" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la institución?')">Cerrar Sesión 🚪</a></li>
                 </ul>
             </div>
         </nav>
@@ -31,13 +31,6 @@
             </div>
 
             <div class="card">
-                <!-- Mostrar mensajes de éxito/error -->
-                @if (TempData["SuccessMessage"] != null)
-                {
-                    <div class="alert alert-success" style="background: #d4edda; color: #155724; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
-                        @TempData["SuccessMessage"]
-                    </div>
-                }
 
                 @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors.Count > 0)
                 {
@@ -66,8 +59,8 @@
                     </div>
 
                     <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
-                        <a href="feed.html" class="btn" style="background: var(--light); color: var(--dark);">Cancelar</a>
-                        <input type="submit" class="btn btn--success">Publicar en el Feed Comunitario</input>
+                        <a asp-action="Feed" asp-controller="Feed" asp-area="" class="btn" style="background: var(--light); color: var(--dark);">Cancelar</a>
+                        <input type="submit" class="btn btn--success" value="Publicar en el Feed Comunitario" />
                     </div>
                 </form>
             </div>

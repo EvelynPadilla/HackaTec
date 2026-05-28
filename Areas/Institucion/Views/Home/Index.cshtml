@@ -15,15 +15,14 @@
     <div class="app-container">
         <nav class="navbar">
             <div class="navbar__brand">
-                <img src="/Images/logo.png" class="navbar__logo" alt="Logo LAZO" />
+                <img src="~/Images/logo.png" class="navbar__logo" alt="Logo LAZO" />
                 <span class="navbar__title">LAZO</span>
             </div>
             <div class="navbar__nav-group">
                 <ul class="navbar__menu">
-                    <li><a asp-action="Feed" asp-controller="Feed" class="navbar__link">Feed</a></li>
-                    <li><a asp-action="Start" asp-controller="Chat" class="navbar__link">Mensajes <span class="badge">1</span></a></li>
-                    <li><a asp-action="Index" asp-controller="Home" asp-area="Institucion" class="navbar__link" style="text-decoration: underline;">Mi Perfil</a></li>
-                    <li><a asp-action="Logout" asp-controller="Account" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión 🚪</a></li>
+                    <li><a asp-action="Feed" asp-controller="Feed" asp-area="" class="navbar__link">Ver Feed</a></li>
+                    <li><a asp-action="Index" asp-controller="Home" asp-area="Institucion" class="navbar__link">Mi Historial</a></li>
+                    <li><a asp-action="Logout" asp-controller="Account" asp-area="Donante" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la institución?')">Cerrar Sesión 🚪</a></li>
                 </ul>
             </div>
         </nav>
@@ -48,11 +47,10 @@
             </section>
 
             <div class="tabs-container">
-                <button class="tab-btn active" onclick="switchTab(event, 'tab-necesidades')">📑 Necesidades (@Model.Publicaciones.Count)</button>
-                <button class="tab-btn" onclick="switchTab(event, 'tab-agradecimientos')">❤️ Agradecimientos (@Model.PublicacionesAgradecimiento.Count)</button>
+                <button class="tab-btn" onclick="switchTab(event, 'tab-necesidades')">📑 Necesidades</button>
+                <button class="tab-btn" onclick="switchTab(event, 'tab-agradecimientos')">❤️ Agradecimientos</button>
             </div>
 
-            <!-- Tab de Necesidades -->
             <div id="tab-necesidades" class="tab-content active">
                 <h2 style="color: var(--primary); font-size: 1.25rem; margin-bottom: 1rem;">📑 Historial de Requerimientos Escolares</h2>
 
@@ -84,7 +82,6 @@
                 }
             </div>
 
-            <!-- Tab de Agradecimientos -->
             <div id="tab-agradecimientos" class="tab-content">
                 <h2 style="color: var(--success); font-size: 1.25rem; margin-bottom: 1rem;">❤️ Muro de Reconocimientos Comunitarios</h2>
 
@@ -123,24 +120,18 @@
 
     <script>
             function switchTab(event, tabId) {
-                // 1. Ocultar todos los bloques de contenido de pestañas
                 const contents = document.querySelectorAll('.tab-content');
                 contents.forEach(content => content.classList.remove('active'));
 
-                // 2. Quitar la línea activa de todos los botones de la barra superior
                 const buttons = document.querySelectorAll('.tab-btn');
                 buttons.forEach(btn => btn.classList.remove('active'));
 
-                // 3. Mostrar el bloque de la pestaña seleccionada
                 document.getElementById(tabId).classList.add('active');
 
-                // 4. Marcar el botón actual como activo
                 event.currentTarget.classList.add('active');
             }
 
-            // Inicializar la pestaña activa al cargar la página
             document.addEventListener('DOMContentLoaded', function() {
-                // Asegurar que la pestaña de necesidades está visible por defecto
                 const necesidadesTab = document.getElementById('tab-necesidades');
                 const agradecimientosTab = document.getElementById('tab-agradecimientos');
             

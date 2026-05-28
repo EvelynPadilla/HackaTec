@@ -64,7 +64,7 @@ namespace HackaTec.Areas.Donante.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
         [HttpGet]
         public IActionResult Registrar()
