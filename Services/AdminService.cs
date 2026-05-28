@@ -40,6 +40,7 @@ namespace HackaTec.Services
                 PersonaResponsable = modelo.Responsable,
                 TelefonoEscuela = modelo.TelefonoEscuela,
                 TelefonoResponsable = modelo.TelefonoResponsable,
+                Contrasena = modelo.Contraseña,
                 Estado = true // Por defecto habilitada al crear
             };
             repoEscuelas.Insert(nuevaEscuela);

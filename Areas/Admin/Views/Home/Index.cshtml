@@ -66,8 +66,8 @@
                         </div>
                         <div class="form-group">
                             <label>Contraseña *</label>
-                            <input type="password" class="form-control"  minlength="10" maxlength="10" pattern="[0-9]{10}" placeholder="10 dígitos numéricos" required>
-                            <span asp-validation-for="@Model.FormularioInstitucion.TelefonoResponsable" class="text-danger"></span>
+                            <input type="password" class="form-control" asp-for="@Model.FormularioInstitucion.Contraseña" required>
+                            <span asp-validation-for="@Model.FormularioInstitucion.Contraseña" class="text-danger"></span>
                         </div>
                     </div>
                     <button type="submit" class="btn btn--success">Registrar y Activar Escuela</button>

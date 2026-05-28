@@ -45,5 +45,10 @@ namespace HackaTec.Areas.Admin.ViewModels
         [MinLength(10, ErrorMessage = "El telefono del responsable debe tener 10 caracteres.")]
         [DataType(DataType.Text)]
         public string TelefonoResponsable { get; set; } = null!;
+
+        [Required(ErrorMessage = "La contraseña es obligatoria.")]
+        [StringLength(50, ErrorMessage = "La contraseña no puede exceder los 50 caracteres.")]
+        [DataType(DataType.Password)]
+        public string Contraseña { get; set; } = null!;
     }
 }
