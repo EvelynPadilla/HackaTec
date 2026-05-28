@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `hackatec` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `hackatec`;
--- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
 -- Host: localhost    Database: hackatec
 -- ------------------------------------------------------
--- Server version	8.0.43
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -68,7 +66,7 @@ CREATE TABLE `instituciones_educativas` (
   `estado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `cct` (`cct`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +79,7 @@ DROP TABLE IF EXISTS `mensajes`;
 CREATE TABLE `mensajes` (
   `id` int NOT NULL AUTO_INCREMENT,
   `id_sala` int NOT NULL,
-  `remitente_tipo` enum('Donante','Escuela') NOT NULL,
+  `remitente_tipo` enum('Donante','Institucion') NOT NULL,
   `id_remitente` int NOT NULL,
   `contenido` text,
   `ruta_imagen` varchar(255) DEFAULT NULL,
@@ -90,7 +88,7 @@ CREATE TABLE `mensajes` (
   PRIMARY KEY (`id`),
   KEY `FK_Mensaje_Sala` (`id_sala`),
   CONSTRAINT `FK_Mensaje_Sala` FOREIGN KEY (`id_sala`) REFERENCES `salas_chat` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +130,7 @@ CREATE TABLE `publicaciones_necesidad` (
   PRIMARY KEY (`id`),
   KEY `FK_institucion_publicaciones` (`id_institucion`),
   CONSTRAINT `FK_institucion_publicaciones` FOREIGN KEY (`id_institucion`) REFERENCES `instituciones_educativas` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +153,7 @@ CREATE TABLE `salas_chat` (
   CONSTRAINT `FK_Chat_Donante` FOREIGN KEY (`id_usuario_donante`) REFERENCES `usuario` (`id`),
   CONSTRAINT `FK_Chat_Institucion` FOREIGN KEY (`id_institucion`) REFERENCES `instituciones_educativas` (`id`),
   CONSTRAINT `FK_Chat_Post` FOREIGN KEY (`id_post_necesidad`) REFERENCES `publicaciones_necesidad` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -176,7 +174,7 @@ CREATE TABLE `usuario` (
   `foto_perfil` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `correo` (`correo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -188,15 +186,4 @@ CREATE TABLE `usuario` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-27 16:09:38
-
-
--- Trigger Institucion
-DELIMITER //
-DROP TRIGGER IF EXISTS `hackatec`.`instituciones_educativas_AFTER_INSERT`//
-
-CREATE DEFINER = CURRENT_USER TRIGGER `hackatec`.`instituciones_educativas_AFTER_INSERT` AFTER INSERT ON `instituciones_educativas` FOR EACH ROW
-BEGIN
-	insert into usuario(nombre, correo, contrasena_hash, telefono, rol) values(new.nombre, new.cct, new.contrasena, new.telefono_escuela, "Institución");
-END //
-DELIMITER ;
+-- Dump completed on 2026-05-28 10:49:09
