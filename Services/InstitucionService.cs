@@ -79,5 +79,41 @@ namespace HackaTec.Services
             var institucion = repoEscuelas.GetAll().FirstOrDefault(i => i.Id == id);
             return institucion != null ? institucion.Direccion : string.Empty;
         }
+
+        public void GuardarNecesidad(PublicarNecesidadViewModel model)
+        {
+            var nuevaPublicacion = new PublicacionesNecesidad
+            {
+                IdInstitucion = model.IdInstitucion,
+                Titulo = model.Titulo,
+                Descripcion = model.Descripcion,
+                Fecha = DateTime.Now, 
+                Estado = true 
+            };
+            repoNecesidad.Insert(nuevaPublicacion);
+        }
+        //Crear un agradecimiento:
+
+        public void CrearAgradecimiento(PublicacionesAgradecimientoViewModel model)
+
+        {
+
+            var nuevoAgradecimiento = new PublicacionesAgradecimiento
+
+            {
+
+                Descripcion = model.Descripcion,
+
+                IdPublicacionNecesidad = model.IdPublicacionNecesidad,
+
+                IdUsuarioDonante = model.IdUsuarioDonante,
+
+                RutaFotografia = model.RutaFotografia
+
+            };
+
+            repoAgradecimiento.Insert(nuevoAgradecimiento);
+
+        }
     }
 }

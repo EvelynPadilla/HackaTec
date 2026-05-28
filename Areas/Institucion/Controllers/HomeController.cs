@@ -54,10 +54,49 @@ namespace HackaTec.Areas.Institucion.Controllers
             return View(model);
         }
 
-
+        [HttpGet]
         public IActionResult PublicarNecesidad()
         {
-            return View();
+            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+            PublicarNecesidadViewModel model = new PublicarNecesidadViewModel
+            {
+                IdInstitucion = id
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult PublicarNecesidad(PublicarNecesidadViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var institucion = institucionService.ObtenerPorId(model.IdInstitucion);
+                if (institucion == null)
+                {
+                    ModelState.AddModelError("", "Institución no encontrada");
+                    return View(model);
+                }
+
+                model.Fecha = DateTime.Now;
+                model.Estado = true; 
+
+                institucionService.GuardarNecesidad(model);
+
+
+                TempData["SuccessMessage"] = "Necesidad publicada exitosamente";
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error al publicar la necesidad: {ex.Message}");
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -73,7 +112,35 @@ namespace HackaTec.Areas.Institucion.Controllers
             // utilizando el servicio correspondiente.
             // Por ejemplo:
             // institucionService.GuardarAgradecimiento(model);
-            return RedirectToAction("Index");
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var publicacionNecesidad = institucionService.ObtenerPublicacionesNecesidad(model.IdPublicacionNecesidad).FirstOrDefault();
+
+                var institucion = institucionService.ObtenerPorId(publicacionNecesidad.IdInstitucion);
+                if (institucion == null)
+                {
+                    ModelState.AddModelError("", "Institución no encontrada");
+                    return View(model);
+                }
+
+                model.Fecha = DateTime.Now;
+
+                institucionService.CrearAgradecimiento(model);
+
+
+                TempData["SuccessMessage"] = "Agradecimiento publicado exitosamente";
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error al publicar el agradecimiento: {ex.Message}");
+                return View(model);
+            }
         }
     }
 }
