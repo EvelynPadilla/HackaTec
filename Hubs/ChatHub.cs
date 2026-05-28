@@ -55,7 +55,8 @@ namespace HackaTec.Hubs
                     mensaje.Contenido,
                     mensaje.RutaImagen,
                     FechaEnvio = mensaje.FechaEnvio,
-                    mensaje.EstadoLeido
+                    mensaje.EstadoLeido,
+                   
                 });
             }
             catch (Exception ex)

@@ -21,7 +21,7 @@ namespace HackaTec.Areas.Institucion.Controllers
         }
         [HttpGet]
         public IActionResult Index()
-        {
+          {
             int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
 
             var model = new IndexViewModel2

@@ -132,7 +132,7 @@ public partial class HackatecContext : DbContext
             entity.Property(e => e.IdRemitente).HasColumnName("id_remitente");
             entity.Property(e => e.IdSala).HasColumnName("id_sala");
             entity.Property(e => e.RemitenteTipo)
-                .HasColumnType("enum('Donante','Escuela')")
+                .HasColumnType("enum('Donante','Institucion')")
                 .HasColumnName("remitente_tipo");
             entity.Property(e => e.RutaImagen)
                 .HasMaxLength(255)
