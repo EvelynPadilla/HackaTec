@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenidos a LAZO - Economía Social y Regional</title>
-    <link rel="stylesheet" href="styles.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/styles.css" asp-append-version="true">
 </head>
 <body style="background-color: var(--light);">
     <div class="app-container">
@@ -40,7 +40,7 @@
                                 Publica de forma transparente las necesidades específicas de infraestructura de tu plantel y conecta con el apoyo solidario de tu entorno cercano.
                             </p>
                         </div>
-                        <a href="/Account/Login?role=Escuela" class="btn btn--primary btn--block" style="padding: 0.75rem;">
+                        <a href="@Url.Action("Login", "Account", new { area = "Institucion" })" class="btn btn--primary btn--block" style="padding: 0.75rem;">
                             Ingresar como Escuela
                         </a>
                     </div>
@@ -53,7 +53,7 @@
                                 Sé parte activa del desarrollo regional. Ofrece materiales aprovechables sobrantes y ayuda directamente a dignificar los espacios educativos locales.
                             </p>
                         </div>
-                        <a href="/Account/Login?role=Donante" class="btn btn--success btn--block" style="padding: 0.75rem;">
+                        <a href="@Url.Action("Login", "Account", new { area = "Donante" })" class="btn btn--success btn--block" style="padding: 0.75rem;">
                             Ingresar como Donante
                         </a>
                     </div>

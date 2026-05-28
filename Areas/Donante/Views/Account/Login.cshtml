@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión Donante - Mi-Proyecto</title>
+    <title>Iniciar Sesión Donante</title>
     <link rel="stylesheet" href="~/styles.css">
 </head>
 <body>
@@ -43,9 +43,7 @@
                         <span asp-validation-for="ContrasenaHash" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
 
-                    <div style="margin-bottom: 1.5rem; text-align: right;">
-                        <a href="#" style="font-size: 0.85rem; color: var(--primary-light); text-decoration: none;">¿Olvidaste tu contraseña?</a>
-                    </div>
+               
 
                     <button type="submit" class="btn btn--primary btn--block" style="padding: 0.75rem;">
                         Ingresar como Donante
@@ -57,9 +55,7 @@
                         <span style="color: var(--dark);">¿No tienes cuenta?</span>
                         <a asp-area="Donante" asp-controller="Account" asp-action="Registrar" style="color: var(--primary-light); font-weight: bold; text-decoration: none;">Regístrate aquí</a>
                     </div>
-                    <div style="margin-top: 0.5rem;">
-                        <a href="#" style="color: var(--gray); text-decoration: none;">¿Eres una Escuela? Entra aquí</a>
-                    </div>
+                  
                 </div>
 
             </div>

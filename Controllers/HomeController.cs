@@ -6,7 +6,7 @@ namespace HackaTec.Controllers
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Feed", "Feed");
+            return View();
         }
     }
 }

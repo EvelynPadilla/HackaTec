@@ -50,7 +50,7 @@ namespace HackaTec.Areas.Institucion.Controllers
 
                 await HttpContext.SignInAsync(principal);
 
-                return RedirectToAction("Index", "Home", new { area = "Institucion" });
+                return RedirectToAction("Feed", "Feed", new { area = "" });
             }
             else
             {
