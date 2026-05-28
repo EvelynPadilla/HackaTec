@@ -1,0 +1,182 @@
+﻿@model HackaTec.Areas.Institucion.ViewModels.PublicacionesAgradecimientoViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Agradecimiento - LAZO</title>
+    <link rel="stylesheet" href="~/styles.css" asp-append-version="true">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="navbar__brand">
+                <img src="~/Images/logo.png" class="navbar__logo" alt="Logo LAZO" />
+                <span class="navbar__title">LAZO</span>
+            </div>
+            <div class="navbar__nav-group">
+                <ul class="navbar__menu">
+                    <li><a asp-area="" asp-controller="Feed" asp-action="Index" class="navbar__link">Inicio</a></li>
+                    <li><a asp-area="" asp-controller="Chat" asp-action="Index" class="navbar__link">Mensajes</a></li>
+                    <li><a asp-area="Institucion" asp-controller="Home" asp-action="Index" class="navbar__link">Mi Perfil</a></li>
+                    <li><a asp-area="" asp-controller="Account" asp-action="Logout" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="main-content" style="max-width: 650px;">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success" style="background: #d4edda; color: #155724; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors.Count > 0)
+            {
+                <div class="alert alert-danger" style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                    @foreach (var error in ViewData.ModelState[""].Errors)
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+
+            <div style="margin-bottom: 1.5rem;">
+                <h1 style="color: var(--primary); font-size: 1.75rem; margin-bottom: 0.25rem;">❤️ Redactar Nota de Gratitud</h1>
+                <p style="color: var(--gray); font-size: 0.9rem;">Publica un agradecimiento enlazado para reconocer el apoyo de la comunidad y construir reputación.</p>
+            </div>
+
+            <div class="card">
+                <form asp-area="Institucion" asp-controller="Home" asp-action="PublicarAgradecimiento" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Campo oculto para Id y Fecha -->
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Fecha" />
+
+                    <!-- Selector de Necesidad -->
+                    <div class="form-group mb-3">
+                        <label for="IdPublicacionNecesidad">¿A qué necesidad estás agradeciendo? *</label>
+                        <div style="position: relative;">
+                            <select id="IdPublicacionNecesidad" name="IdPublicacionNecesidad" class="form-control" required style="appearance: none; -webkit-appearance: none;">
+                                <option value="">Selecciona la necesidad que fue cubierta...</option>
+                                @if (Model.Publicaciones != null && Model.Publicaciones.Any())
+                                {
+                                    @foreach (var necesidad in Model.Publicaciones)
+                                    {
+                                        var estadoTexto = necesidad.Estado == true ? "Activo" : "Cubierto";
+                                        var estadoEmoji = necesidad.Estado == true ? "🟢" : "✅";
+                                        <option value="@necesidad.Id" data-estado="@necesidad.Estado">
+                                            @estadoEmoji @necesidad.Titulo - (@estadoTexto) - Publicado: @(necesidad.Fecha?.ToString("dd/MM/yyyy") ?? "Sin fecha")
+                                        </option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="" disabled>No hay necesidades publicadas aún</option>
+                                }
+                            </select>
+                            <span style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--gray);">▼</span>
+                        </div>
+                        <span asp-validation-for="IdPublicacionNecesidad" class="text-danger" style="font-size: 0.85rem; color: #dc3545;"></span>
+                        <small style="color: var(--gray); font-size: 0.75rem;">Solo puedes agradecer por necesidades que hayan sido cubiertas</small>
+                    </div>
+
+                    <!-- Selector de Donante -->
+                    <div class="form-group mb-3">
+                        <label asp-for="IdUsuarioDonante">Etiquetar al Donante / Colaborador *</label>
+                        <div style="position: relative;">
+                            <select asp-for="IdUsuarioDonante" class="form-control" required style="appearance: none; -webkit-appearance: none;">
+                                <option value="">Selecciona al donante que te apoyó...</option>
+                                @if (Model.Donantes != null && Model.Donantes.Any())
+                                {
+                                    @foreach (var donante in Model.Donantes)
+                                    {
+                                        <option value="@donante.Id">@donante.Nombre (@donante.Correo)</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="" disabled>No hay donantes disponibles</option>
+                                }
+                            </select>
+                            <span style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--gray);">▼</span>
+                        </div>
+                        <span asp-validation-for="IdUsuarioDonante" class="text-danger" style="font-size: 0.85rem; color: #dc3545;"></span>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group mb-3">
+                        <label asp-for="Descripcion">Describe el resultado final o comparte tu testimonio *</label>
+                        <textarea asp-for="Descripcion" class="form-control" rows="5" style="resize: vertical;" placeholder="Cuéntale a la comunidad cómo se usó el material excedente donado y el impacto positivo que tuvo en los alumnos..." required></textarea>
+                        <span asp-validation-for="Descripcion" class="text-danger" style="font-size: 0.85rem; color: #dc3545;"></span>
+                        <small style="color: var(--gray); font-size: 0.75rem;">Máximo 500 caracteres</small>
+                    </div>
+
+                    <!-- Fotografía Opcional -->
+                    <div class="form-group mb-3">
+                        <label asp-for="RutaFotografia">Evidencia Fotográfica (Opcional)</label>
+                        <div style="border: 2px dashed var(--gray); padding: 1.5rem; border-radius: var(--border-radius); text-align: center; background: #f9fafb;">
+                            <input type="file" id="RutaFotografia" name="RutaFotografia" class="form-control" accept=".jpg,.jpeg,.png" style="border: none; background: transparent; padding: 0;" />
+                            <p style="font-size: 0.8rem; color: var(--gray); margin-top: 0.5rem;">Formatos admitidos: JPG, JPEG o PNG. Máximo 5MB.</p>
+                        </div>
+                        <span asp-validation-for="RutaFotografia" class="text-danger" style="font-size: 0.85rem; color: #dc3545;"></span>
+                    </div>
+
+                    <!-- Botones -->
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                        <a asp-area="Institucion" asp-controller="Home" asp-action="Index" class="btn" style="background: var(--light); color: var(--dark); text-decoration: none; padding: 0.6rem 1.2rem; border-radius: var(--border-radius);">Cancelar</a>
+                        <button type="submit" class="btn btn--success" style="padding: 0.6rem 1.5rem; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                            ❤️ Publicar Agradecimiento
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+            // Validación adicional en cliente para asegurar que solo se pueda agradecer por necesidades activas (o cubiertas según tu lógica)
+            document.querySelector('form').addEventListener('submit', function(e) {
+                const selectNecesidad = document.getElementById('IdPublicacionNecesidad');
+                const selectedOption = selectNecesidad.options[selectNecesidad.selectedIndex];
+                const estado = selectedOption.getAttribute('data-estado');
+            
+                // Si solo quieres permitir agradecimientos para necesidades cubiertas (Estado = false)
+                if (estado === 'True') {
+                    e.preventDefault();
+                    alert('⚠️ Solo puedes crear agradecimientos para necesidades que ya han sido marcadas como "Cubiertas". Por favor, marca primero la necesidad como cubierta.');
+                    return false;
+                }
+                return true;
+            });
+
+            // Mostrar información de la necesidad seleccionada
+            document.getElementById('IdPublicacionNecesidad').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const estado = selectedOption.getAttribute('data-estado');
+                const infoDiv = document.getElementById('necesidadInfo');
+            
+                if (estado === 'True') {
+                    if (!infoDiv) {
+                        const div = document.createElement('div');
+                        div.id = 'necesidadInfo';
+                        div.className = 'alert alert-warning';
+                        div.style.cssText = 'background: #fff3cd; color: #856404; padding: 0.75rem; border-radius: var(--border-radius); margin-top: 0.5rem; font-size: 0.875rem;';
+                        div.innerHTML = '⚠️ Esta necesidad aún está activa. Para crear un agradecimiento, primero debes marcarla como "Cubierta" desde tu perfil.';
+                        this.parentNode.parentNode.appendChild(div);
+                    }
+                } else {
+                    const existingDiv = document.getElementById('necesidadInfo');
+                    if (existingDiv) existingDiv.remove();
+                }
+            });
+    </script>
+</body>
+</html>

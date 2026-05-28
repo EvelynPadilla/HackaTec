@@ -11,6 +11,7 @@
 	  <Folder Include="Areas\Donante\Models\" />
 	  <Folder Include="Areas\Institucion\Controllers\" />
     <Folder Include="Areas\Institucion\Models\" />
+    <Folder Include="Areas\Institucion\Views\Shared\" />
     <Folder Include="Areas\repositories\" />
   </ItemGroup>
 

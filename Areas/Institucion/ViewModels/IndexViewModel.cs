@@ -42,5 +42,8 @@ namespace HackaTec.Areas.Institucion.ViewModels
         public string? RutaFotografia { get; set; }
         public DateTime? Fecha { get; set; }
 
+        public List<Usuario> Donantes { get; set; } = new List<Usuario>();
+        public List<PublicacionesNecesidad> Publicaciones { get; set; } = new List<PublicacionesNecesidad>();
+
     }
 }

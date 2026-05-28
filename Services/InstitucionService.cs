@@ -13,14 +13,16 @@ namespace HackaTec.Services
         private readonly Repository<PublicacionesNecesidad> repoPublicaciones;
         private readonly Repository<PublicacionesAgradecimiento> repoAgradecimiento;
         private readonly Repository<PublicacionesNecesidad> repoNecesidad;
+        private readonly Repository<Usuario> repoUsuarios;
 
         public InstitucionService(Repository<InstitucionesEducativas> repoEscuelas, Repository<PublicacionesNecesidad> repoPublicaciones, Repository<PublicacionesAgradecimiento>
-            repoAgradecimiento, Repository<PublicacionesNecesidad> repoNecesidad)
+            repoAgradecimiento, Repository<PublicacionesNecesidad> repoNecesidad, Repository<Usuario> repoUsuarios)
         {
             this.repoEscuelas = repoEscuelas;
             this.repoPublicaciones = repoPublicaciones;
             this.repoAgradecimiento = repoAgradecimiento;
             this.repoNecesidad = repoNecesidad;
+            this.repoUsuarios = repoUsuarios;
         }
         public InstitucionesEducativas? Login(LoginInstitucionesViewModel model)
         {
@@ -114,6 +116,11 @@ namespace HackaTec.Services
 
             repoAgradecimiento.Insert(nuevoAgradecimiento);
 
+        }
+
+        public List<Usuario> ObtenerDonantes()
+        {
+            return repoUsuarios.GetAll().Where(u => u.Rol=="Donante").ToList();
         }
     }
 }
