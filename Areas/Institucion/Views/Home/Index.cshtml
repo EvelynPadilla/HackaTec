@@ -1,4 +1,5 @@
-﻿@model HackaTec.Areas.Institucion.ViewModels.IndexViewModel
+﻿@model HackaTec.Areas.Institucion.ViewModels.IndexViewModel2
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
 }
@@ -47,23 +48,23 @@
             </section>
 
             <div class="tabs-container">
-                <button class="tab-btn" onclick="switchTab(event, 'tab-necesidades')">📑 Necesidades</button>
-                <button class="tab-btn" onclick="switchTab(event, 'tab-agradecimientos')">❤️ Agradecimientos</button>
+                <button class="tab-btn" asp-action="PublicarNecesidad" asp-controller="Home" asp-area="Institucion">📑 Necesidades</button>
+                <button class="tab-btn" asp-action="Agradecimientos" asp-controller="Home" asp-area="Institucion">❤️ Agradecimientos</button>
             </div>
 
             <div id="tab-general" class="tab-content active">
                 <h2 style="color: var(--primary); font-size: 1.25rem; margin-bottom: 1rem;">Resumen de Actividad Reciente</h2>
 
                 <div class="feed">
-                    @foreach (var necesidad in Model.Necesidades)
+                    @foreach (var necesidad in Model.Publicaciones)
                     {
-                        var claseEstado = necesidad.EstadoActivo ? "badge-status--activo" : "badge-status--cubierto";
-                        var textoEstado = necesidad.EstadoActivo ? "Activo" : "Cubierto";
+                        var claseEstado = necesidad.Estado==true ? "badge-status--activo" : "badge-status--cubierto";
+                        var textoEstado = necesidad.Estado==true ? "Activo" : "Cubierto";
 
-                        <article class="card post @(!necesidad.EstadoActivo ? "post--cubierto" : "")">
+                        <article class="card post @(!necesidad.Estado==true ? "post--cubierto" : "")">
                             <div class="post__header">
                                 <span class="badge-status @claseEstado">Estatus: @textoEstado</span>
-                                <span>Publicado el: @necesidad.FechaPublicacion.ToString("dd/MM/yyyy")</span>
+                                <span>Publicado el: @(necesidad.Fecha != null ? necesidad.Fecha.Value.ToString("dd/MM/yyyy") : "")</span>
                             </div>
                             <h3 class="post__title" style="margin-top: 0.5rem;">@necesidad.Titulo</h3>
                             <p class="post__content" style="margin-top: 0.5rem;">@necesidad.Descripcion</p>
