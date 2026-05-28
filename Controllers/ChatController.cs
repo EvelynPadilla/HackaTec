@@ -85,19 +85,25 @@ namespace HackaTec.Controllers
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userTypeClaim = User.FindFirstValue(ClaimTypes.Role); // ya estaba bien
 
-            if (userIdClaim == null || userTypeClaim == null) return Challenge();
+           
+            if (userIdClaim == null || userTypeClaim == null) return RedirectToAction("login", "Account",new { area ="Donante"});
+            
             if (userTypeClaim != "Donante") return Forbid();
 
             int idDonante = int.Parse(userIdClaim);
             var sala = await _chatService.GetOrCreateRoomAsync(idDonante, idInstitucion, idPostNecesidad);
-            return RedirectToAction(nameof(Index), new { idSala = sala.Id });
+          
+                return RedirectToAction(nameof(Index), new { idSala = sala.Id });
+           
+            
+
         }
 
         [HttpGet]
         public async Task<IActionResult> GetConversationsList()
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            var userType = User.FindFirstValue(ClaimTypes.Role)!; // ← cambiado
+            var userType = User.FindFirstValue(ClaimTypes.Role)!;
 
             var salas = await _chatService.GetUserRoomsAsync(userId, userType);
             var result = new List<object>();

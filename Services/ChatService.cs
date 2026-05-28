@@ -64,7 +64,6 @@ namespace HackaTec.Services
         public async Task<List<SalasChat>> GetUserRoomsAsync(int userId, string userType)
         {
             IQueryable<SalasChat> query = _context.SalasChat
-                .Include(s => s.IdInstitucionNavigation)
                 .Include(s => s.IdUsuarioDonanteNavigation)
                 .Include(s => s.IdPostNecesidadNavigation)
                 .Include(s => s.Mensajes);
