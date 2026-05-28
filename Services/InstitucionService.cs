@@ -2,6 +2,7 @@
 using HackaTec.Areas.Institucion.ViewModels;
 using HackaTec.Models.Entities;
 using HackaTec.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace HackaTec.Services
@@ -10,13 +11,20 @@ namespace HackaTec.Services
     {
         private readonly Repository<InstitucionesEducativas> repoEscuelas;
         private readonly Repository<PublicacionesNecesidad> repoPublicaciones;
-        public InstitucionService(Repository<InstitucionesEducativas> repoEscuelas, Repository<PublicacionesNecesidad> repoPublicaciones)
+        private readonly Repository<PublicacionesAgradecimiento> repoAgradecimiento;
+        private readonly Repository<PublicacionesNecesidad> repoNecesidad;
+
+        public InstitucionService(Repository<InstitucionesEducativas> repoEscuelas, Repository<PublicacionesNecesidad> repoPublicaciones, Repository<PublicacionesAgradecimiento>
+            repoAgradecimiento, Repository<PublicacionesNecesidad> repoNecesidad)
         {
             this.repoEscuelas = repoEscuelas;
             this.repoPublicaciones = repoPublicaciones;
+            this.repoAgradecimiento = repoAgradecimiento;
+            this.repoNecesidad = repoNecesidad;
         }
         public InstitucionesEducativas? Login(LoginInstitucionesViewModel model)
-        {bool ingresoCorreo = model.Correo_CCT.Contains("@");
+        {
+            bool ingresoCorreo = model.Correo_CCT.Contains("@");
 
             if (ingresoCorreo)
             {
@@ -35,6 +43,41 @@ namespace HackaTec.Services
 
                 return institucion;
             }
+        }
+
+        public InstitucionesEducativas? ObtenerPorId(int id)
+        {
+            return repoEscuelas.GetAll().FirstOrDefault(i => i.Id == id);
+        }
+
+        public List<PublicacionesAgradecimiento> ObtenerPublicacionesAgradecimiento(int id)
+        {
+            var publicaciones = repoAgradecimiento.GetAll().Where(p => p.IdPublicacionNecesidadNavigation.IdInstitucion == id);
+            return publicaciones.ToList();
+        }
+
+        public List<PublicacionesNecesidad> ObtenerPublicacionesNecesidad(int id)
+        {
+            var publicaciones = repoNecesidad.GetAll().Where(p => p.IdInstitucion == id);
+            return publicaciones.ToList();
+        }
+
+        public string ObtenerCCTPorId(int id)
+        {
+            var institucion = repoEscuelas.GetAll().FirstOrDefault(i => i.Id == id);
+            return institucion != null ? institucion.Cct : string.Empty;
+        }
+
+        public string ObtenerNombreEscuelaPorId(int id)
+        {
+            var institucion = repoEscuelas.GetAll().FirstOrDefault(i => i.Id == id);
+            return institucion != null ? institucion.Nombre : string.Empty;
+        }
+
+        public string ObtenerDireccionPorId(int id)
+        {
+            var institucion = repoEscuelas.GetAll().FirstOrDefault(i => i.Id == id);
+            return institucion != null ? institucion.Direccion : string.Empty;
         }
     }
 }
