@@ -1,4 +1,4 @@
-﻿
+﻿@model HackaTec.Areas.Institucion.ViewModels.IndexViewModel
 @{
     Layout = null;
 }
@@ -31,9 +31,9 @@
 
             <section class="card" style="border-top: 5px solid var(--primary); display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
                 <div>
-                    <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Escuela Primaria Benito Juárez</h1>
-                    <p style="color: var(--dark); font-weight: 600; margin-bottom: 0.25rem;">🏫 Clave CCT: <span style="color: var(--primary-light);">05EPR0123X</span></p>
-                    <p style="color: var(--gray); font-size: 0.9rem;">Zona Escolar: 051 | Región Carbonífera, Coahuila</p>
+                    <h1 style="color: var(--primary); margin-bottom: 0.5rem;">@Model.NombreEscuela</h1>
+                    <p style="color: var(--dark); font-weight: 600; margin-bottom: 0.25rem;">🏫 Clave CCT: <span style="color: var(--primary-light);">@Model.Cct</span></p>
+                    <p style="color: var(--gray); font-size: 0.9rem;">@Model.Direccion</p>
                 </div>
 
                 <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
@@ -55,23 +55,20 @@
                 <h2 style="color: var(--primary); font-size: 1.25rem; margin-bottom: 1rem;">Resumen de Actividad Reciente</h2>
 
                 <div class="feed">
-                    <article class="card post">
-                        <div class="post__header">
-                            <span class="badge-status badge-status--activo">Estatus: Activo</span>
-                            <span>Publicado el: 27/05/2026</span>
-                        </div>
-                        <h3 class="post__title" style="margin-top: 0.5rem;">Falta de pintura acrílica para fachadas de salones</h3>
-                        <p class="post__content" style="margin-top: 0.5rem;">Tenemos 3 salones vandalizados debido a las lluvias y graffitis. Requerimos aproximadamente 2 o 3 cubetas de pintura acrílica blanca o azul.</p>
-                    </article>
+                    @foreach (var necesidad in Model.Necesidades)
+                    {
+                        var claseEstado = necesidad.EstadoActivo ? "badge-status--activo" : "badge-status--cubierto";
+                        var textoEstado = necesidad.EstadoActivo ? "Activo" : "Cubierto";
 
-                    <div class="card post post--thanks">
-                        <div class="post__header">
-                            <span style="font-weight: bold; color: var(--success);">❤️ ¡Gracias a Carlos Mendoza!</span>
-                            <span>Hace 2 semanas</span>
-                        </div>
-                        <h3 style="color: var(--success); font-size: 1.1rem; margin: 0.5rem 0;">Donación Recibida: Tubos de PVC</h3>
-                        <p style="font-size: 0.95rem;">Queremos agradecer profundamente al donante Carlos Mendoza por hacernos llegar el material excedente de su obra. Gracias a su generosidad el patio ya no se inunda.</p>
-                    </div>
+                        <article class="card post @(!necesidad.EstadoActivo ? "post--cubierto" : "")">
+                            <div class="post__header">
+                                <span class="badge-status @claseEstado">Estatus: @textoEstado</span>
+                                <span>Publicado el: @necesidad.FechaPublicacion.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <h3 class="post__title" style="margin-top: 0.5rem;">@necesidad.Titulo</h3>
+                            <p class="post__content" style="margin-top: 0.5rem;">@necesidad.Descripcion</p>
+                        </article>
+                    }
                 </div>
             </div>
 
