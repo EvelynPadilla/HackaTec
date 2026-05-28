@@ -1,4 +1,4 @@
-﻿@model HackaTec.Areas.Institucion.ViewModels.NecesidadViewModel
+﻿@model HackaTec.Areas.Institucion.ViewModels.PublicarNecesidadViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publicar Necesidad - Espacio Escolar</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="~/styles.css">
 </head>
 <body>
     <div class="app-container">
@@ -31,33 +31,48 @@
             </div>
 
             <div class="card">
-                <form id="form-publicar-post" action="feed.html" method="POST" enctype="multipart/form-data">
+                <!-- Mostrar mensajes de éxito/error -->
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success" style="background: #d4edda; color: #155724; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+
+                @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors.Count > 0)
+                {
+                    <div class="alert alert-danger" style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                        @foreach (var error in ViewData.ModelState[""].Errors)
+                        {
+                            <p>@error.ErrorMessage</p>
+                        }
+                    </div>
+                }
+
+                <form asp-action="PublicarNecesidad" asp-controller="Home" Institucion" method="post">
+                    
+                    <input type="hidden" asp-for="IdInstitucion" />
 
                     <div class="form-group">
-                        <label for="titulo-post">¿Qué material o insumo necesitan? (Título breve) *</label>
-                        <input type="text" id="titulo-post" class="form-control" placeholder="Ej: Se solicitan 4 láminas para techar desayunador" required>
+                        <label asp-for="Titulo">¿Qué material o insumo necesitan? (Título breve) *</label>
+                        <input asp-for="Titulo" class="form-control" placeholder="Ej: Se solicitan 4 láminas para techar desayunador" required />
+                        <span asp-validation-for="Titulo" class="text-danger" style="color: #dc3545; font-size: 0.875rem;"></span>
                     </div>
 
                     <div class="form-group">
-                        <label for="contenido-post">Explica la situación o el uso que se le dará al material *</label>
-                        <textarea id="contenido-post" class="form-control" rows="5" style="resize: vertical;" placeholder="Detalla las dimensiones, el estado del área actual y por qué el excedente de otra obra puede solucionar el problema del plantel..." required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="evidencia-foto">Evidencia Fotográfica del Área Escolar (Recomendado - Máx 5MB)</label>
-                        <div style="border: 2px dashed var(--gray); padding: 1.5rem; border-radius: var(--border-radius); text-align: center; background: #f9fafb;">
-                            <input type="file" id="evidencia-foto" class="form-control" accept=".jpg,.jpeg,.png" style="border: none; background: transparent; padding: 0;">
-                            <p style="font-size: 0.8rem; color: var(--gray); margin-top: 0.5rem;">Formatos admitidos: JPG, JPEG o PNG. Se comprimirá automáticamente en el servidor.</p>
-                        </div>
+                        <label asp-for="Descripcion">Explica la situación o el uso que se le dará al material *</label>
+                        <textarea asp-for="Descripcion" class="form-control" rows="5" style="resize: vertical;" placeholder="Detalla las dimensiones, el estado del área actual y por qué el excedente de otra obra puede solucionar el problema del plantel..." required></textarea>
+                        <span asp-validation-for="Descripcion" class="text-danger" style="color: #dc3545; font-size: 0.875rem;"></span>
                     </div>
 
                     <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
                         <a href="feed.html" class="btn" style="background: var(--light); color: var(--dark);">Cancelar</a>
-                        <button type="submit" class="btn btn--success">Publicar en el Feed Comunitario</button>
+                        <input type="submit" class="btn btn--success">Publicar en el Feed Comunitario</input>
                     </div>
                 </form>
             </div>
         </main>
     </div>
+
 </body>
 </html>
