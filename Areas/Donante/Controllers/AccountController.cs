@@ -33,7 +33,7 @@ namespace HackaTec.Areas.Donante.Controllers
                 {
                     List<Claim> claims = new List<Claim>();
                     claims.Add(new Claim(ClaimTypes.Role, "Donante"));
-                    claims.Add(new Claim(ClaimTypes.NameIdentifier, usuario.Correo));
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()));
                     claims.Add(new Claim(ClaimTypes.Name, usuario.Nombre));
                     claims.Add(new Claim("Id", usuario.Id.ToString()));
                     claims.Add(new Claim(ClaimTypes.Role, "Donante"));

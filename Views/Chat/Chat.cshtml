@@ -1,0 +1,249 @@
+﻿@using HackaTec.Models.Entities
+@model List<Mensajes>
+@{
+    Layout = null;
+    int idSala = ViewBag.IdSala;
+    string currentUserType = ViewBag.CurrentUserType;   // "Donante" o "Institucion"
+    int currentUserId = ViewBag.CurrentUserId;
+    string otroNombre = ViewBag.OtroNombre;
+    string necesidadInfo = ViewBag.NecesidadInfo;
+    bool esDonante = User.IsInRole("Donante");          // Para usar en el sidebar
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat con @otroNombre - Mi-Proyecto</title>
+    <link rel="stylesheet" href="~/styles.css">
+    <style>
+        /* ... tus estilos (se mantienen igual) ... */
+        .chat-container { display: flex; height: calc(100vh - 60px); }
+        .chat-sidebar { width: 280px; background: #f8fafc; border-right: 1px solid #e2e8f0; overflow-y: auto; }
+        .conversation-item { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; cursor: pointer; transition: background 0.2s; }
+        .conversation-item:hover { background: #f1f5f9; }
+        .conversation-item.active { background: #dbeafe; border-left: 3px solid var(--primary); }
+        .conversation-item h4 { margin: 0 0 4px 0; font-size: 0.9rem; }
+        .conversation-item p { margin: 0; font-size: 0.8rem; color: #475569; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .chat-window { flex: 1; display: flex; flex-direction: column; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 1rem; background: #ffffff; }
+        .message { margin-bottom: 1rem; max-width: 75%; clear: both; }
+        .message--out { background: #dcf8c6; margin-left: auto; text-align: right; border-radius: 16px 16px 4px 16px; padding: 8px 12px; }
+        .message--in { background: #f1f5f9; margin-right: auto; text-align: left; border-radius: 16px 16px 16px 4px; padding: 8px 12px; }
+        .message img { max-width: 100%; border-radius: 8px; margin-top: 6px; }
+        .message small { display: block; font-size: 0.7rem; margin-top: 4px; color: #64748b; }
+        .chat-input-area { display: flex; gap: 8px; padding: 1rem; border-top: 1px solid #e2e8f0; background: white; }
+        .chat-input-area input[type="text"] { flex: 1; }
+        .empty-chat { text-align: center; padding: 2rem; color: #64748b; }
+        .no-conversations { padding: 1rem; text-align: center; color: #64748b; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="navbar__brand">💬 Centro de Vinculación Instantánea</div>
+            <div>
+                <a href="@Url.Action("Feed", "Feed")" style="color: white; text-decoration: none; margin-right: 1rem;">Volver al Feed</a>
+                @if (esDonante)
+                {
+                    <a href="@Url.Action("Feed", "Feed")#necesidades" style="color: white; text-decoration: none;">+ Nuevo Chat</a>
+                }
+            </div>
+        </nav>
+
+        <div class="chat-container">
+            <aside class="chat-sidebar">
+                <div style="padding: 1rem; border-bottom: 1px solid #e2e8f0; background: #f1f5f9;">
+                    <strong>Mis Conversaciones</strong>
+                </div>
+                <div id="conversationsList">
+                    <div class="no-conversations">Cargando...</div>
+                </div>
+            </aside>
+
+            <main class="chat-window">
+                @if (!string.IsNullOrEmpty(necesidadInfo))
+                {
+                    <div style="background: #f8fafc; padding: 0.75rem; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem;">
+                        📌 <strong>Vinculado a la necesidad:</strong> "@necesidadInfo"
+                    </div>
+                }
+
+                <div class="chat-messages" id="chatMessages">
+                    @if (Model == null || !Model.Any())
+                    {
+                        <div class="empty-chat">No hay mensajes aún. Escribe el primero.</div>
+                    }
+                    else
+                    {
+                        foreach (var msg in Model)
+                        {
+                            bool isMine = (msg.RemitenteTipo == currentUserType && msg.IdRemitente == currentUserId);
+                            string messageClass = isMine ? "message--out" : "message--in";
+                            <div class="message @messageClass">
+                                <p>@msg.Contenido</p>
+                                @if (!string.IsNullOrEmpty(msg.RutaImagen))
+                                {
+                                    <img src="@msg.RutaImagen" alt="Adjunto">
+                                }
+                                <small>@msg.FechaEnvio</small>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="file" id="chat-file" style="display: none;" accept="image/*">
+                    <button class="btn btn--primary" id="attachButton">📷</button>
+                    <input type="text" id="messageInput" class="form-control" placeholder="Escribe un mensaje..." autocomplete="off">
+                    <button class="btn btn--success" id="sendButton">Enviar</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script>
+        // --- Variables desde el servidor ---
+        let isConnected = false;
+        const roomId = @idSala;
+        const currentUserType = "@currentUserType";
+        const currentUserId = @currentUserId;
+        const esDonante = @esDonante.ToString().ToLower(); // true/false
+
+        // --- Elementos del DOM ---
+        const messagesContainer = document.getElementById("chatMessages");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+        const attachButton = document.getElementById("attachButton");
+        const fileInput = document.getElementById("chat-file");
+        sendButton.disabled = true;
+        messageInput.disabled = true;
+        // --- Configuración SignalR ---
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+
+      connection.start()
+    .then(() => {
+        console.log("✅ Conexión SignalR establecida");
+        return connection.invoke("JoinRoom", roomId);
+    })
+    .then(() => {
+        console.log("✅ Unido a la sala", roomId);
+        isConnected = true;
+        // Habilitar controles
+        sendButton.disabled = false;
+        messageInput.disabled = false;
+        messageInput.focus();
+    })
+    .catch(err => {
+        console.error("❌ Error de conexión:", err);
+        alert("No se pudo conectar al chat. Recarga la página.");
+    });
+
+        connection.on("ReceiveMessage", (message) => {
+            const isMine = (message.remitenteTipo === currentUserType && message.idRemitente === currentUserId);
+            const messageClass = isMine ? "message--out" : "message--in";
+            const msgDiv = document.createElement("div");
+            msgDiv.className = `message ${messageClass}`;
+            let html = `<p>${escapeHtml(message.contenido)}</p>`;
+            if (message.rutaImagen) html += `<img src="${message.rutaImagen}" alt="Adjunto">`;
+            html += `<small>${new Date(message.fechaEnvio).toLocaleString()}</small>`;
+            msgDiv.innerHTML = html;
+            messagesContainer.appendChild(msgDiv);
+            if (messagesContainer.children.length === 1 && messagesContainer.firstChild.classList?.contains('empty-chat')) {
+                messagesContainer.innerHTML = '';
+                messagesContainer.appendChild(msgDiv);
+            }
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        });
+
+        // --- Enviar mensaje de texto ---
+     sendButton.addEventListener("click", async () => {
+    if (!isConnected) {
+        alert("La conexión aún no está lista. Espera un momento.");
+        return;
+    }
+    const content = messageInput.value.trim();
+    if (!content) return;
+    try {
+        await connection.invoke("SendMessageToRoom", roomId, content, null);
+        messageInput.value = "";
+    } catch (err) {
+        console.error("Error al enviar:", err);
+        alert("Error al enviar mensaje: " + err.message);
+    }
+});
+        // --- Enviar imagen ---
+        attachButton.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", async () => {
+            const file = fileInput.files[0];
+            if (!file) return;
+            const formData = new FormData();
+            formData.append("image", file);
+            formData.append("idSala", roomId);
+            try {
+                const response = await fetch("/Chat/UploadImage", { method: "POST", body: formData });
+                const data = await response.json();
+                if (data.success) await connection.invoke("SendMessageToRoom", roomId, "", data.imageUrl);
+            } catch (err) { console.error(err); }
+            fileInput.value = "";
+        });
+
+        // --- Cargar lista de conversaciones (sidebar) ---
+        async function loadConversations() {
+            try {
+                const resp = await fetch("/Chat/GetConversationsList");
+                const convs = await resp.json();
+                const container = document.getElementById("conversationsList");
+                if (convs.length === 0) {
+                    let emptyMessage = "No tienes conversaciones aún.<br>";
+                    if (esDonante) {
+                        emptyMessage += `<span>Explora el <a href="@Url.Action("Feed", "Feed")">Feed</a> y contacta a una institución.</span>`;
+                    } else {
+                        emptyMessage += `<span>Cuando un donante te contacte, aparecerá aquí.</span>`;
+                    }
+                    container.innerHTML = `<div class="no-conversations">${emptyMessage}</div>`;
+                    return;
+                }
+                let html = "";
+                convs.forEach(conv => {
+                    const activeClass = conv.idSala === roomId ? "active" : "";
+                    html += `
+                        <div class="conversation-item ${activeClass}" data-id="${conv.idSala}">
+                            <h4>${escapeHtml(conv.otroNombre)}</h4>
+                            <p>${escapeHtml(conv.ultimoMensaje || "Sin mensajes")}</p>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                document.querySelectorAll('.conversation-item').forEach(el => {
+                    el.addEventListener('click', () => {
+                        window.location.href = `/Chat/Index/${el.getAttribute('data-id')}`;
+                    });
+                });
+            } catch (err) {
+                console.error("Error cargando conversaciones:", err);
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Cargar conversaciones al inicio y cada 10 segundos
+        loadConversations();
+        setInterval(loadConversations, 10000);
+
+        // Scroll al final del historial
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    </script>
+</body>
+</html>

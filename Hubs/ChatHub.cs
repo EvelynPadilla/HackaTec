@@ -26,34 +26,43 @@ namespace HackaTec.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"room_{idSala}");
         }
 
-        public async Task SendMessageToRoom(int idSala, string contenido, string? rutaImagen = null)
+        // Para mensajes de texto (2 argumentos)
+        // Un solo método: acepta 3 parámetros (el tercero opcional en el sentido de que puede ser null)
+        public async Task SendMessageToRoom(int idSala, string contenido, string? rutaImagen)
         {
-            var userIdClaim = Context.User?.FindFirst(ClaimTypes.NameIdentifier);
-            var userTypeClaim = Context.User?.FindFirst("UserType");
-
-            if (userIdClaim == null || userTypeClaim == null) return;
-
-            int idRemitente = int.Parse(userIdClaim.Value);
-            string remitenteTipo = userTypeClaim.Value;
-
-            // Validar que el usuario pertenece a la sala
-            bool isValid = await _chatService.IsUserInRoomAsync(idSala, idRemitente, remitenteTipo);
-            if (!isValid) return;
-
-            // Guardar mensaje en BD
-            var mensaje = await _chatService.SaveMessageAsync(idSala, remitenteTipo, idRemitente, contenido, rutaImagen);
-
-            // Enviar a todos los miembros de la sala
-            await Clients.Group($"room_{idSala}").SendAsync("ReceiveMessage", new
+            try
             {
-                mensaje.Id,
-                mensaje.RemitenteTipo,
-                mensaje.IdRemitente,
-                mensaje.Contenido,
-                mensaje.RutaImagen,
-                FechaEnvio = mensaje.FechaEnvio,
-                mensaje.EstadoLeido
-            });
+                Console.WriteLine($"SendMessageToRoom: idSala={idSala}, contenido={contenido}, rutaImagen={rutaImagen}");
+
+                var userIdClaim = Context.User?.FindFirst(ClaimTypes.NameIdentifier);
+                var userTypeClaim = Context.User?.FindFirst(ClaimTypes.Role);
+
+                if (userIdClaim == null || userTypeClaim == null) return;
+
+                int idRemitente = int.Parse(userIdClaim.Value);
+                string remitenteTipo = userTypeClaim.Value;
+
+                bool isValid = await _chatService.IsUserInRoomAsync(idSala, idRemitente, remitenteTipo);
+                if (!isValid) return;
+
+                var mensaje = await _chatService.SaveMessageAsync(idSala, remitenteTipo, idRemitente, contenido, rutaImagen);
+
+                await Clients.Group($"room_{idSala}").SendAsync("ReceiveMessage", new
+                {
+                    mensaje.Id,
+                    mensaje.RemitenteTipo,
+                    mensaje.IdRemitente,
+                    mensaje.Contenido,
+                    mensaje.RutaImagen,
+                    FechaEnvio = mensaje.FechaEnvio,
+                    mensaje.EstadoLeido
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task UserTyping(int idSala, bool isTyping)

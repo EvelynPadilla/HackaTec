@@ -83,7 +83,12 @@ builder.Services.AddScoped<FeedService>();
 builder.Services.AddScoped<InstitucionService>();
 builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<DonantesService>();
-builder.Services.AddSignalR();
+
+
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+});
 
 var app = builder.Build();
 
@@ -98,6 +103,6 @@ app.MapControllerRoute(
 );
 
 app.MapDefaultControllerRoute();
-app.MapHub<ChatHub>("/chathub");
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();

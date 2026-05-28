@@ -12,7 +12,6 @@ namespace HackaTec.Services
             _context = context;
         }
 
-        // Obtener o crear sala entre donante e institución (opcionalmente vinculada a una necesidad)
         public async Task<SalasChat> GetOrCreateRoomAsync(int idUsuarioDonante, int idInstitucion, int? idPostNecesidad = null)
         {
             var sala = await _context.SalasChat
@@ -78,13 +77,20 @@ namespace HackaTec.Services
             return await query.OrderByDescending(s => s.FechaCreacion).ToListAsync();
         }
 
+
         public async Task<bool> IsUserInRoomAsync(int idSala, int userId, string userType)
         {
+            Console.WriteLine($"IsUserInRoomAsync: idSala={idSala}, userId={userId}, userType={userType}");
             var sala = await _context.SalasChat.FindAsync(idSala);
-            if (sala == null) return false;
-            return userType == "Donante" ? sala.IdUsuarioDonante == userId : sala.IdInstitucion == userId;
+            if (sala == null)
+            {
+                Console.WriteLine("Sala no encontrada");
+                return false;
+            }
+            bool resultado = userType == "Donante" ? sala.IdUsuarioDonante == userId : sala.IdInstitucion == userId;
+            Console.WriteLine($"Resultado: {resultado}");
+            return resultado;
         }
-
         public async Task MarkMessagesAsReadAsync(int idSala, int currentUserId, string currentUserType)
         {
             var mensajes = await _context.Mensajes

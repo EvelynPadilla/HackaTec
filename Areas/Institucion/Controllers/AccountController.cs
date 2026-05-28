@@ -40,7 +40,8 @@ namespace HackaTec.Areas.Institucion.Controllers
                     new Claim(ClaimTypes.NameIdentifier,
                     institucion.Id.ToString()),
                     new Claim(ClaimTypes.Name,
-                        institucion.Cct)
+                        institucion.Cct),
+                    new Claim(ClaimTypes.Role, "Institucion")
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

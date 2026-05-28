@@ -80,13 +80,17 @@
                                         <img src=" alt="Evidencia" class="post__img">
                                     </div>
                                 }
-                                <div class="text-right">
+                                @if (User.IsInRole("Donante"))
+                                    {
+                                          <div class="text-right">
                                     <form method="post" action="@Url.Action("Start", "Chat")">
                                         <input type="hidden" name="idInstitucion" value="@necesidad.IdInstitucion" />
                                         <input type="hidden" name="idPostNecesidad" value="@necesidad.Id" />
                                         <button type="submit" class="btn btn--primary">Quiero Donar</button>
                                     </form>
                                 </div>
+                                    }
+                              
                             </article>
                         }
                     }

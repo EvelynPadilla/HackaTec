@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace HackaTec.Controllers
 {
-    [Authorize]
+
     public class ChatController : Controller
     {
         private readonly ChatService _chatService;
@@ -18,12 +18,12 @@ namespace HackaTec.Controllers
         public async Task<IActionResult> List()
         {
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userTypeClaim = User.FindFirstValue("UserType");
+            var userTypeClaim = User.FindFirstValue(ClaimTypes.Role); // ← cambiado
 
             if (userIdClaim == null || userTypeClaim == null) return Challenge();
 
             int userId = int.Parse(userIdClaim);
-            string userType = userTypeClaim;
+            string userType = userTypeClaim; // "Donante" o "Institucion"
 
             var salas = await _chatService.GetUserRoomsAsync(userId, userType);
             var viewModel = new List<ChatListViewModel>();
@@ -51,7 +51,7 @@ namespace HackaTec.Controllers
         public async Task<IActionResult> Index(int idSala)
         {
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userTypeClaim = User.FindFirstValue("UserType");
+            var userTypeClaim = User.FindFirstValue(ClaimTypes.Role);
 
             if (userIdClaim == null || userTypeClaim == null) return Challenge();
 
@@ -76,14 +76,14 @@ namespace HackaTec.Controllers
             ViewBag.OtroNombre = otroNombre;
             ViewBag.NecesidadInfo = necesidadInfo;
 
-            return View(historial);
+            return View("Chat", historial);
         }
 
         [HttpPost]
         public async Task<IActionResult> Start(int idInstitucion, int? idPostNecesidad = null)
         {
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userTypeClaim = User.FindFirstValue("UserType");
+            var userTypeClaim = User.FindFirstValue(ClaimTypes.Role); // ya estaba bien
 
             if (userIdClaim == null || userTypeClaim == null) return Challenge();
             if (userTypeClaim != "Donante") return Forbid();
@@ -97,7 +97,8 @@ namespace HackaTec.Controllers
         public async Task<IActionResult> GetConversationsList()
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            var userType = User.FindFirstValue("UserType")!;
+            var userType = User.FindFirstValue(ClaimTypes.Role)!; // ← cambiado
+
             var salas = await _chatService.GetUserRoomsAsync(userId, userType);
             var result = new List<object>();
             foreach (var s in salas)
