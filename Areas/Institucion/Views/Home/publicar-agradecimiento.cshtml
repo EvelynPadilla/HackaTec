@@ -1,0 +1,89 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Agradecimiento - LAZO</title>
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="navbar__brand">
+                <img src="~/Images/logo.png" class="navbar__logo" alt="Logo LAZO" />
+                <span class="navbar__title">LAZO</span>
+            </div>
+            <div class="navbar__nav-group">
+                <ul class="navbar__menu">
+                    <li><a href="/Feed" class="navbar__link">Inicio</a></li>
+                    <li><a href="/Chat" class="navbar__link">Mensajes</a></li>
+                    <li><a href="/Perfil" class="navbar__link">Mi Perfil</a></li>
+                    <li><a href="/Account/Logout" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="main-content" style="max-width: 650px;">
+
+            <div style="margin-bottom: 1.5rem;">
+                <h1 style="color: var(--primary); font-size: 1.75rem; margin-bottom: 0.25rem;">❤️ Redactar Nota de Gratitud</h1>
+                <p style="color: var(--gray); font-size: 0.9rem;">Publica un agradecimiento enlazado para reconocer el apoyo de la comunidad y construir reputación[cite: 13, 27].</p>
+            </div>
+
+            <div class="card" style="background-color: #f8fafc; border-left: 4px solid var(--primary-light); padding: 1rem; margin-bottom: 1.5rem;">
+                <p style="font-size: 0.8rem; color: var(--gray); text-transform: uppercase; font-weight: bold; margin-bottom: 0.25rem;">Respondiendo a la Necesidad:</p>
+                <h4 style="color: var(--primary); margin: 0;">Falta de pintura acrílica para fachadas de salones</h4>
+                <input type="hidden" name="PostNecesidadId" value="101" />
+            </div>
+
+            <div class="card">
+                <form id="form-agradecimiento" action="/Feed/GuardarAgradecimiento" method="POST" enctype="multipart/form-data">
+
+                    <div class="form-group">
+                        <label for="donante-selector">Etiquetar al Donante / Colaborador *</label>
+                        <div style="position: relative;">
+                            <select id="donante-selector" class="form-control" required style="appearance: none; -webkit-appearance: none;">
+                                <option value="" disabled selected>Selecciona al donante que te apoyó...</option>
+                                <option value="user_id_1">Carlos Mendoza (carlos.m@mail.com)</option>
+                                <option value="user_id_2">Juan Pérez (juan.perez@mail.com)</option>
+                                <option value="user_id_3">Gael Rodriguez (gael.rod@mail.com)</option>
+                            </select>
+                            <span style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--gray);">▼</span>
+                        </div>
+                        <p style="font-size: 0.8rem; color: var(--gray); margin-top: 0.25rem;">Este agradecimiento se reflejará automáticamente en su muro de logros[cite: 29, 84].</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="titulo-gracias">Título de la Nota de Agradecimiento *</label>
+                        <input type="text" id="titulo-gracias" class="form-control" placeholder="Ej: ¡Los salones quedaron hermosos gracias a tu apoyo!" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contenido-gracias">Describe el resultado final o comparte tu testimonio *</label>
+                        <textarea id="contenido-gracias" class="form-control" rows="5" style="resize: vertical;" placeholder="Cuéntale a la comunidad cómo se usó el material excedente donado y el impacto positivo que tuvo en los alumnos..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fotos-resultado">Evidencia Fotográfica del Resultado Final (Máx. 5MB) [cite: 74, 97]</label>
+                        <div style="border: 2px dashed var(--gray); padding: 1.5rem; border-radius: var(--border-radius); text-align: center; background: #f9fafb;">
+                            <input type="file" id="fotos-resultado" class="form-control" accept=".jpg,.jpeg,.png" style="border: none; background: transparent; padding: 0;">
+                            <p style="font-size: 0.8rem; color: var(--gray); margin-top: 0.5rem;">Las imágenes serán procesadas y comprimidas automáticamente a formato WebP[cite: 134].</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                        <a href="/Perfil" class="btn" style="background: var(--light); color: var(--dark);">Cancelar</a>
+                        <button type="submit" class="btn btn--success" style="padding: 0.6rem 1.5rem;">
+                            ❤️ Publicar Agradecimiento
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

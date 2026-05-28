@@ -14,15 +14,14 @@
     <div class="app-container">
         <nav class="navbar">
             <div class="navbar__brand">
-                <img src="/Images/logo.png" class="navbar__logo" />
+                <img src="~/Images/logo.png" class="navbar__logo" alt="Logo LAZO" />
                 <span class="navbar__title">LAZO</span>
             </div>
             <div class="navbar__nav-group">
                 <ul class="navbar__menu">
-                    <li><a href="/Feed" class="navbar__link">Feed</a></li>
-                    <li><a href="/Chat" class="navbar__link">Mensajes <span class="badge">1</span></a></li>
-                    <li><a href="#" class="navbar__link" style="text-decoration: underline;">Mi Perfil</a></li>
-                    <li><a href="/Account/Logout" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión 🚪</a></li>
+                    <li><a href="@Url.Action("List", "Chat")" class="navbar__link">Mensajes</a></li>
+                    <li><a href="@Url.Action("Perfil", "Donante")" class="navbar__link">Mi Perfil</a></li>
+                    <li><a href="@Url.Action("Logout", "Account", new { area = "Institucion" })" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión 🚪</a></li>
                 </ul>
             </div>
         </nav>
