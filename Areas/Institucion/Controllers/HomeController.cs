@@ -153,5 +153,43 @@ namespace HackaTec.Areas.Institucion.Controllers
                 return View(model);
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CambiarEstadoNecesidad(int id, bool nuevoEstado)
+        {
+            try
+            {
+                int idInstitucion = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+                var necesidad = institucionService.ObtenerPublicacionNecesidadPorId(id);
+
+                if (necesidad == null)
+                {
+                    TempData["ErrorMessage"] = "No se encontró la necesidad especificada.";
+                    return RedirectToAction("Index");
+                }
+
+                if (necesidad.IdInstitucion != idInstitucion)
+                {
+                    TempData["ErrorMessage"] = "No tienes permiso para modificar esta necesidad.";
+                    return RedirectToAction("Index");
+                }
+
+                institucionService.CambiarEstadoNecesidad(id, nuevoEstado);
+
+                string mensaje = nuevoEstado ?
+                    "La necesidad ha sido reactivada exitosamente." :
+                    "La necesidad ha sido marcada como cubierta exitosamente.";
+
+                TempData["SuccessMessage"] = mensaje;
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error al cambiar el estado de la necesidad: {ex.Message}";
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

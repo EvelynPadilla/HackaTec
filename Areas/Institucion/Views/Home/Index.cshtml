@@ -29,6 +29,20 @@
 
         <main class="main-content" style="max-width: 900px;">
 
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success" style="background: #d4edda; color: #155724; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger" style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
             <section class="card" style="border-top: 5px solid var(--primary); display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
                 <div>
                     <h1 style="color: var(--primary); margin-bottom: 0.5rem;">@Model.NombreEscuela</h1>
@@ -69,6 +83,31 @@
                                 </div>
                                 <h3 class="post__title" style="margin-top: 0.5rem;">@necesidad.Titulo</h3>
                                 <p class="post__content" style="margin-top: 0.5rem;">@necesidad.Descripcion</p>
+                                
+                                <div class="post__footer" style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--light); padding-top: 1rem;">
+                                    @if (necesidad.Estado == true)
+                                    {
+                                        <form asp-action="CambiarEstadoNecesidad" asp-controller="Home" asp-area="Institucion" method="post" style="display: inline;" onsubmit="return confirm('¿Marcar esta necesidad como CUBIERTA? Esta acción cambiará el estado de la publicación.');">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@necesidad.Id" />
+                                            <input type="hidden" name="nuevoEstado" value="false" />
+                                            <button type="submit" class="btn btn--small" style="background: var(--success); color: white; border: none; cursor: pointer; padding: 0.5rem 1rem; border-radius: var(--border-radius);">
+                                                ✅ Marcar como Cubierta
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="CambiarEstadoNecesidad" asp-controller="Home" asp-area="Institucion" method="post" style="display: inline;" onsubmit="return confirm('¿Reactivar esta necesidad como ACTIVA? Esta acción hará que la publicación sea visible nuevamente.');">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@necesidad.Id" />
+                                            <input type="hidden" name="nuevoEstado" value="true" />
+                                            <button type="submit" class="btn btn--small" style="background: var(--primary); color: white; border: none; cursor: pointer; padding: 0.5rem 1rem; border-radius: var(--border-radius);">
+                                                🔄 Reactivar Necesidad
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
                             </article>
                         }
                     </div>
@@ -134,7 +173,7 @@
             document.addEventListener('DOMContentLoaded', function() {
                 const necesidadesTab = document.getElementById('tab-necesidades');
                 const agradecimientosTab = document.getElementById('tab-agradecimientos');
-            
+        
                 if (necesidadesTab) {
                     necesidadesTab.classList.add('active');
                 }

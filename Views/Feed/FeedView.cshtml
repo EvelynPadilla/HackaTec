@@ -73,11 +73,11 @@
                     {
                         @foreach (var necesidad in Model.Publicaciones)
                         {
-                            <article class="card post @(necesidad.Estado == true ? "post--cubierto" : "")">
+                            <article class="card post @(necesidad.Estado == false ? "post--cubierto" : "")">
                                 <div class="post__header">
                                     <span>Institución: @necesidad.NombreInstitucion</span>
                                     <span>@(necesidad.Fecha?.ToString("dd/MM/yyyy HH:mm") ?? "Fecha no disponible")</span>
-                                    @if (necesidad.Estado == true)
+                                    @if (necesidad.Estado == false)
                                     {
                                         <span class="badge-status badge-status--cubierto">Cubierto</span>
                                     }

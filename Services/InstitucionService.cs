@@ -30,15 +30,10 @@ namespace HackaTec.Services
 
             if (ingresoCorreo)
             {
-                // ATENCIÓN: La tabla instituciones_educativas NO tiene un campo 'correo'.
-                // Por lo tanto, si escriben un correo, no hay forma de encontrar la escuela
-                // usando repoEscuelas. Retornamos null porque las credenciales son inválidas aquí.
                 return null;
             }
             else
             {
-                // Como no tiene '@', asumimos que es el CCT validado por tu ViewModel.
-                // Buscamos que coincida tanto el CCT como la contraseña.
                 var institucion = repoEscuelas.GetAll().FirstOrDefault(i =>
                     i.Cct == model.Correo_CCT &&
                     i.Contrasena == model.Contrasena);
@@ -121,6 +116,30 @@ namespace HackaTec.Services
         public List<Usuario> ObtenerDonantes()
         {
             return repoUsuarios.GetAll().Where(u => u.Rol=="Donante").ToList();
+        }
+
+        public PublicacionesNecesidad? ObtenerPublicacionNecesidadPorId(int id)
+        {
+            return repoNecesidad.GetAll().FirstOrDefault(p => p.Id == id);
+        }
+
+        public void CambiarEstadoNecesidad(int id, bool nuevoEstado)
+        {
+            var necesidad = repoNecesidad.GetAll().FirstOrDefault(p => p.Id == id);
+            if (necesidad != null)
+            {
+                necesidad.Estado = nuevoEstado;
+
+                if (!nuevoEstado)
+                {
+                    necesidad.Fecha = DateTime.Now;
+                }
+                else
+                {
+                    necesidad.Fecha = null;
+                }
+                repoNecesidad.Update(necesidad);
+            }
         }
     }
 }
