@@ -41,7 +41,7 @@
                     <a asp-action="PublicarNecesidad" asp-controller="Home" asp-area="Institucion" class="btn btn--success" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                         📢 Publicar Necesidad
                     </a>
-                    <a href="/publicar-necesidad.html" class="btn btn--primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <a asp-action="PublicarAgradecimiento" asp-controller="Home" asp-area="Institucion" class="btn btn--primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                         ➕ Crear Agradecimiento
                     </a>
                 </div>
@@ -49,7 +49,7 @@
 
             <div class="tabs-container">
                 <button class="tab-btn" asp-action="PublicarNecesidad" asp-controller="Home" asp-area="Institucion">📑 Necesidades</button>
-                <button class="tab-btn" asp-action="Agradecimientos" asp-controller="Home" asp-area="Institucion">❤️ Agradecimientos</button>
+                <button class="tab-btn" asp-action="PublicarAgradecimiento" asp-controller="Home" asp-area="Institucion">❤️ Agradecimientos</button>
             </div>
 
             <div id="tab-general" class="tab-content active">

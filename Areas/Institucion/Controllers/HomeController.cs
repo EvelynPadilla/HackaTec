@@ -100,13 +100,21 @@ namespace HackaTec.Areas.Institucion.Controllers
         }
 
         [HttpGet]
-        public IActionResult Agradecimientos()
+        public IActionResult PublicarAgradecimiento()
         {
-            return View();
+            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            var model = new PublicacionesAgradecimientoViewModel
+            {
+                Donantes = institucionService.ObtenerDonantes(),
+                Publicaciones = institucionService.ObtenerPublicacionesNecesidad(id)
+            };
+
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Agradecimientos(PublicacionesAgradecimientoViewModel model)
+        public IActionResult PublicarAgradecimiento(PublicacionesAgradecimientoViewModel model)
         {
             // Aquí puedes agregar la lógica para guardar el agradecimiento en la base de datos
             // utilizando el servicio correspondiente.
@@ -121,7 +129,9 @@ namespace HackaTec.Areas.Institucion.Controllers
             {
                 var publicacionNecesidad = institucionService.ObtenerPublicacionesNecesidad(model.IdPublicacionNecesidad).FirstOrDefault();
 
-                var institucion = institucionService.ObtenerPorId(publicacionNecesidad.IdInstitucion);
+                int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+                var institucion = institucionService.ObtenerPorId(id);
                 if (institucion == null)
                 {
                     ModelState.AddModelError("", "Institución no encontrada");
@@ -139,6 +149,7 @@ namespace HackaTec.Areas.Institucion.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", $"Error al publicar el agradecimiento: {ex.Message}");
+                model.Donantes = institucionService.ObtenerDonantes();
                 return View(model);
             }
         }
