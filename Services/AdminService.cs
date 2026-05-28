@@ -21,8 +21,7 @@ namespace HackaTec.Services
             return admin;
         }
 
-        //Servicios Requeridos
-        // Agregar una escuela con sus datos(los datos son los de la clase IndexAgregarViewModel)
+    
         public string? AgregarEscuela(IndexAgregarViewModel modelo)
         {
             bool existe = repoEscuelas.GetAll().Any(e =>
@@ -41,13 +40,12 @@ namespace HackaTec.Services
                 TelefonoEscuela = modelo.TelefonoEscuela,
                 TelefonoResponsable = modelo.TelefonoResponsable,
                 Contrasena = modelo.Contraseña,
-                Estado = true // Por defecto habilitada al crear
+                Estado = true 
             };
             repoEscuelas.Insert(nuevaEscuela);
-            return null; //Exito
+            return null; 
         }
-        // La escuela no debe de existir previamente, se debe validar que no exista una escuela con el mismo nombre o dirección.
-        // Traer los datos de las escuelas para mostrar en las vistas(los daotos estan en la IndexViewModel)
+ 
         public List<IndexViewModel> ObtenerEscuelas()
         {
             return repoEscuelas.GetAll().Select(e => new IndexViewModel
@@ -55,13 +53,11 @@ namespace HackaTec.Services
                 Id = e.Id,
                 CCT = e.Cct,
                 NombreEscuela = e.Nombre,
-                Estado = e.Estado ?? true // Manejo de nulos por seguridad
+                Estado = e.Estado ?? true 
             }).ToList();
         }
-        // Inabiltar o habilitar una escuela, esto se hace cambiando el estado de la escuela, si el estado es false la escuela esta inabilitada y si el estado es true la escuela esta habilitada.
         public bool CambiarEstadoEscuela(int id)
         {
-            // Buscamos la escuela (Asumo que puedes usar GetAll().FirstOrDefault o un método GetById)
             var escuela = repoEscuelas.GetAll().FirstOrDefault(e => e.Id == id);
 
             if (escuela == null)
@@ -69,11 +65,9 @@ namespace HackaTec.Services
                 return false;
             }
 
-            // Invertimos el estado: si es true pasa a false, y viceversa
             bool estadoActual = escuela.Estado ?? true;
             escuela.Estado = !estadoActual;
 
-            // Actualizamos en la base de datos
             repoEscuelas.Update(escuela);
 
             return true;

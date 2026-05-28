@@ -21,7 +21,6 @@ namespace HackaTec.Controllers
             FeedViewModel vm = new FeedViewModel();
             vm.BarraBusqueda = search;
 
-            // Cargar necesidades (Publicaciones)
             if (!string.IsNullOrEmpty(search))
             {
                 var necesidadesFiltradas = feedService.ObtenerPublicacionesNecesidadPorTitulo(search);
@@ -79,15 +78,13 @@ namespace HackaTec.Controllers
         [HttpGet]
         public IActionResult FeedAgradecimientos(string? search)
         {
-            // Este método puede ser eliminado si usas la vista unificada.
-            // Pero lo dejamos por si lo necesitas para otros fines.
+
             return RedirectToAction("Feed", new { search });
         }
 
         [HttpPost]
         public IActionResult Feed(FeedViewModel vm)
         {
-            // Redirige a GET para evitar reenvío de formulario
             return RedirectToAction("Feed", new { search = vm.BarraBusqueda });
         }
     }

@@ -10,12 +10,10 @@ namespace HackaTec.Filters
         {
             if (!context.HttpContext.User.Identity.IsAuthenticated)
             {
-                // Redirigir al login de Institución
                 context.Result = new RedirectToActionResult("Login", "Account", new { area = "Institucion" });
             }
             else if (!context.HttpContext.User.HasClaim(c => c.Type == "InstitucionId"))
             {
-                // Si no tiene claim de institución
                 context.Result = new RedirectToActionResult("Login", "Account", new { area = "Institucion" });
             }
         }

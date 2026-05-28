@@ -18,12 +18,12 @@ namespace HackaTec.Controllers
         public async Task<IActionResult> List()
         {
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userTypeClaim = User.FindFirstValue(ClaimTypes.Role); // ← cambiado
+            var userTypeClaim = User.FindFirstValue(ClaimTypes.Role); 
 
             if (userIdClaim == null || userTypeClaim == null) return Challenge();
 
             int userId = int.Parse(userIdClaim);
-            string userType = userTypeClaim; // "Donante" o "Institucion"
+            string userType = userTypeClaim;
 
             var salas = await _chatService.GetUserRoomsAsync(userId, userType);
             var viewModel = new List<ChatListViewModel>();

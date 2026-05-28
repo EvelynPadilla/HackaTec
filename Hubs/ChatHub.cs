@@ -26,8 +26,6 @@ namespace HackaTec.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"room_{idSala}");
         }
 
-        // Para mensajes de texto (2 argumentos)
-        // Un solo método: acepta 3 parámetros (el tercero opcional en el sentido de que puede ser null)
         public async Task SendMessageToRoom(int idSala, string contenido, string? rutaImagen)
         {
             try

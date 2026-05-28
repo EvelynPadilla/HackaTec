@@ -10,12 +10,10 @@ namespace HackaTec.Filters
         {
             if (!context.HttpContext.User.Identity.IsAuthenticated)
             {
-                // Redirigir al login de Admin
                 context.Result = new RedirectToActionResult("Login", "Account", new { area = "Admin" });
             }
             else if (!context.HttpContext.User.IsInRole("Admin"))
             {
-                // Si no tiene rol de Admin
                 context.Result = new RedirectToActionResult("Login", "Account", new { area = "Admin" });
             }
         }

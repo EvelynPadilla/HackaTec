@@ -116,10 +116,7 @@ namespace HackaTec.Areas.Institucion.Controllers
         [HttpPost]
         public IActionResult PublicarAgradecimiento(PublicacionesAgradecimientoViewModel model)
         {
-            // Aquí puedes agregar la lógica para guardar el agradecimiento en la base de datos
-            // utilizando el servicio correspondiente.
-            // Por ejemplo:
-            // institucionService.GuardarAgradecimiento(model);
+
             if (!ModelState.IsValid)
             {
                 return View(model);

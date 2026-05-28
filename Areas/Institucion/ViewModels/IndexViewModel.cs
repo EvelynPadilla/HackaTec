@@ -4,12 +4,9 @@ namespace HackaTec.Areas.Institucion.ViewModels
 {
     public class IndexViewModel2
     {
-        // ==========================================
-        // 1. DATOS DEL ENCABEZADO (PERFIL DE LA ESCUELA)
-        // ==========================================
         public string NombreEscuela { get; set; } = null!;
         public string Cct { get; set; } = null!;
-        public string Direccion { get; set; } = null!; // Para reemplazar: "Zona Escolar: 051..."
+        public string Direccion { get; set; } = null!; 
 
         public List<PublicacionesViewModel> Publicaciones { get; set; } = new List<PublicacionesViewModel>();
         public List<PublicacionesAgradecimientoViewModel> PublicacionesAgradecimiento { get; set; } = new List<PublicacionesAgradecimientoViewModel>();
@@ -33,7 +30,7 @@ namespace HackaTec.Areas.Institucion.ViewModels
     {
         public int Id { get; set; }
 
-        public int IdPublicacionNecesidad { get; set; } //id de la publicación de necesidad a la que se agradece
+        public int IdPublicacionNecesidad { get; set; } 
 
         public int IdUsuarioDonante { get; set; }
 
