@@ -1,0 +1,67 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenidos a LAZO - Economía Social y Regional</title>
+    <link rel="stylesheet" href="styles.css" asp-append-version="true">
+</head>
+<body style="background-color: var(--light);">
+    <div class="app-container">
+
+        <nav class="navbar" style="justify-content: center;">
+            <div class="navbar__brand">
+                <img src="~/Images/logo.png" class="navbar__logo" />
+                <span class="navbar__title" style="font-size: 1.6rem;">LAZO</span>
+            </div>
+        </nav>
+
+        <main class="main-content" style="max-width: 1100px; padding: 2rem 1rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; align-items: start;">
+
+                <section class="card" style="border-top: 5px solid var(--primary); padding: 2.5rem 2rem; height: 100%;">
+                    <h1 style="color: var(--primary); font-size: 2rem; margin-bottom: 1.5rem; text-align: center;">¿Quiénes Somos?</h1>
+                    <p style="font-size: 1.05rem; color: var(--dark); line-height: 1.7; text-align: justify;">
+                        LAZO funciona como un puente de ayuda mutua que activa el valor de los recursos excedentes de la comunidad (materiales de construcción, pintura y mobiliario en buen estado) y los redistribuye de forma transparente hacia los planteles escolares que más lo necesitan. Creemos en el desarrollo regional sostenible, donde el bienestar colectivo se construye a partir de la corresponsabilidad ciudadana y el apoyo directo a las futuras generaciones.
+                    </p>
+                </section>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; height: 100%;">
+
+                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; text-align: center; border-bottom: 4px solid var(--primary-light); padding: 2rem 1.5rem; height: 100%;">
+                        <div style="padding-bottom: 1.5rem;">
+                            <div style="font-size: 3rem; margin-bottom: 0.75rem;">🏫</div>
+                            <h3 style="color: var(--primary); font-size: 1.3rem; margin-bottom: 0.75rem;">Institución Educativa</h3>
+                            <p style="color: var(--gray); font-size: 0.95rem; line-height: 1.5; text-align: center;">
+                                Publica de forma transparente las necesidades específicas de infraestructura de tu plantel y conecta con el apoyo solidario de tu entorno cercano.
+                            </p>
+                        </div>
+                        <a href="/Account/Login?role=Escuela" class="btn btn--primary btn--block" style="padding: 0.75rem;">
+                            Ingresar como Escuela
+                        </a>
+                    </div>
+
+                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; text-align: center; border-bottom: 4px solid var(--success); padding: 2rem 1.5rem; height: 100%;">
+                        <div style="padding-bottom: 1.5rem;">
+                            <div style="font-size: 3rem; margin-bottom: 0.75rem;">🤝</div>
+                            <h3 style="color: var(--success); font-size: 1.3rem; margin-bottom: 0.75rem;">Donante</h3>
+                            <p style="color: var(--gray); font-size: 0.95rem; line-height: 1.5; text-align: center;">
+                                Sé parte activa del desarrollo regional. Ofrece materiales aprovechables sobrantes y ayuda directamente a dignificar los espacios educativos locales.
+                            </p>
+                        </div>
+                        <a href="/Account/Login?role=Donante" class="btn btn--success btn--block" style="padding: 0.75rem;">
+                            Ingresar como Donante
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+    </div>
+</body>
+</html>
