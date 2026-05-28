@@ -1,0 +1,100 @@
+﻿@model HackaTec.Areas.Donante.ViewModels.PerfilViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - LAZO</title>
+    <link rel="stylesheet" href="~/styles.css" asp-append-version="true">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="navbar__brand">
+                <img src="~/Images/logo.png" class="navbar__logo" alt="Logo LAZO" />
+                <span class="navbar__title">LAZO</span>
+            </div>
+            <div class="navbar__nav-group">
+                <ul class="navbar__menu">
+                    <li><a href="@Url.Action("List", "Chat")" class="navbar__link">Mensajes</a></li>
+                    <li><a href="@Url.Action("Perfil", "Donante")" class="navbar__link">Mi Perfil</a></li>
+                    <li><a href="@Url.Action("Logout", "Account", new { area = "Donante" })" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión 🚪</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="main-content" style="max-width: 900px;">
+
+            <section class="card" style="border-top: 5px solid var(--primary); display: flex; align-items: center; gap: 2rem; padding: 2rem; margin-bottom: 2rem;">
+                <div style="flex-shrink: 0;">
+                    @if (!string.IsNullOrEmpty(Model.FotoPerfil))
+                    {
+                        <img src="@Model.FotoPerfil" alt="Foto perfil" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <svg style="width: 110px; height: 110px; border-radius: 50%; background-color: #e5e7eb; display: block;" viewBox="0 0 24 24" fill="#3b82f6">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                    }
+                </div>
+                <div>
+                    <h1 style="color: var(--primary); font-size: 2.2rem; font-weight: bold; margin: 0; line-height: 1.2;">
+                        @Model.Nombre @Model.Apellidos
+                    </h1>
+                    <p style="color: var(--gray); font-size: 1rem; margin-top: 0.25rem;">@Model.Rol</p>
+                </div>
+            </section>
+
+            <div id="tab-general" class="tab-content active">
+                <h2 style="color: var(--primary); font-size: 1.35rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    ❤️ Agradecimientos
+                </h2>
+
+                <div class="feed">
+                    @if (Model.Publicaciones == null || !Model.Publicaciones.Any())
+                    {
+                        <div class="card" style="padding: 2rem; text-align: center; color: var(--gray);">
+                            Aún no has recibido agradecimientos. Cuando una institución agradezca tu donación, aparecerá aquí.
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var agradecimiento in Model.Publicaciones)
+                        {
+                            <div class="card post post--thanks" style="padding: 1.5rem; border-radius: var(--border-radius);">
+                                <div class="post__header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <span style="font-weight: bold; color: var(--success); display: flex; align-items: center; gap: 0.25rem;">
+                                        💗 ¡Gracias a @Model.Nombre @Model.Apellidos!
+                                    </span>
+                                    <span style="color: var(--gray); font-size: 0.85rem;">
+                                        @(agradecimiento.Fecha?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")
+                                    </span>
+                                </div>
+
+                                <h3 style="color: var(--success); font-size: 1.2rem; font-weight: bold; margin-bottom: 0.75rem;">
+                                    Donación Reconocida
+                                </h3>
+
+                                <p style="font-size: 1rem; color: var(--dark); line-height: 1.5;">
+                                    @agradecimiento.Descripcion
+                                </p>
+
+                                @if (!string.IsNullOrEmpty(agradecimiento.RutaFotografia))
+                                {
+                                    <div class="post__images" style="margin-top: 1rem;">
+                                        <img src="@agradecimiento.RutaFotografia" alt="Evidencia" style="max-width: 100%; border-radius: 8px;" />
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
