@@ -86,7 +86,7 @@ namespace HackaTec.Controllers
             var userTypeClaim = User.FindFirstValue(ClaimTypes.Role); 
 
            
-            if (userIdClaim == null || userTypeClaim == null) return RedirectToAction("login", "Account",new { area ="Donante"});
+            if (userIdClaim == null || userTypeClaim == null) return RedirectToAction("login", "Account",new { area ="Donante"}); // regirige al login si no esta autenticando
             
             if (userTypeClaim != "Donante") return Forbid();
 
