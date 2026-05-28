@@ -20,10 +20,10 @@
             </div>
             <div class="navbar__nav-group">
                 <ul class="navbar__menu">
-                    <li><a href="/Feed" class="navbar__link">Feed</a></li>
-                    <li><a href="/Chat" class="navbar__link">Mensajes <span class="badge">1</span></a></li>
-                    <li><a href="#" class="navbar__link" style="text-decoration: underline;">Mi Perfil</a></li>
-                    <li><a href="/Account/Logout" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión 🚪</a></li>
+                    <li><a asp-action="Feed" asp-controller="Feed" class="navbar__link">Feed</a></li>
+                    <li><a asp-action="Start" asp-controller="Chat" class="navbar__link">Mensajes <span class="badge">1</span></a></li>
+                    <li><a asp-action="Index" asp-controller="Home" asp-area="Institucion" class="navbar__link" style="text-decoration: underline;">Mi Perfil</a></li>
+                    <li><a asp-action="Logout" asp-controller="Account" class="navbar__link navbar__link--logout" onclick="return confirm('¿Cerrar sesión de la plataforma?')">Cerrar Sesión 🚪</a></li>
                 </ul>
             </div>
         </nav>
@@ -48,8 +48,8 @@
             </section>
 
             <div class="tabs-container">
-                <button class="tab-btn" asp-action="PublicarNecesidad" asp-controller="Home" asp-area="Institucion">📑 Necesidades</button>
-                <button class="tab-btn" asp-action="PublicarAgradecimiento" asp-controller="Home" asp-area="Institucion">❤️ Agradecimientos</button>
+                <button class="tab-btn" asp-action="MostrarNecesidades" asp-controller="Home" asp-area="Institucion">📑 Necesidades</button>
+                <button class="tab-btn" asp-action="MostrarAgradecimientos" asp-controller="Home" asp-area="Institucion">❤️ Agradecimientos</button>
             </div>
 
             <div id="tab-general" class="tab-content active">
