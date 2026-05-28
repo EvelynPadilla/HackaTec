@@ -32,7 +32,8 @@ namespace HackaTec.Controllers
                     Descripcion = p.Descripcion,
                     Fecha = p.Fecha,
                     IdInstitucion = p.IdInstitucion,
-                    Estado = p.Estado
+                    Estado = p.Estado,
+                    NombreInstitucion = feedService.ObtenerNombreInstitucion(p.IdInstitucion)
                 }).ToList();
 
                 var agradecimientosFiltrados = feedService.ObtenerPublicacionesAgradecimientoPorTitulo(search);
@@ -43,7 +44,7 @@ namespace HackaTec.Controllers
                     Fecha = a.Fecha,
                     IdPublicacionNecesidad = a.IdPublicacionNecesidad,
                     IdUsuarioDonante = a.IdUsuarioDonante,
-                    RutaFotografia = a.RutaFotografia
+                    RutaFotografia = a.RutaFotografia                  
                 }).ToList();
             }
             else
@@ -56,7 +57,8 @@ namespace HackaTec.Controllers
                     Descripcion = p.Descripcion,
                     Fecha = p.Fecha,
                     IdInstitucion = p.IdInstitucion,
-                    Estado = p.Estado
+                    Estado = p.Estado,
+                    NombreInstitucion = feedService.ObtenerNombreInstitucion(p.IdInstitucion)
                 }).ToList();
 
                 var agradecimientos = feedService.ObtenerPublicacionesAgradecimiento();

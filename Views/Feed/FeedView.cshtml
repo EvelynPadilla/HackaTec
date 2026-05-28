@@ -68,7 +68,7 @@
                         {
                             <article class="card post @(necesidad.Estado == true ? "post--cubierto" : "")">
                                 <div class="post__header">
-                                    <span>Institución ID: @necesidad.IdInstitucion</span>
+                                    <span>Institución: @necesidad.NombreInstitucion</span>
                                     <span>@(necesidad.Fecha?.ToString("dd/MM/yyyy HH:mm") ?? "Fecha no disponible")</span>
                                     @if (necesidad.Estado == true)
                                     {

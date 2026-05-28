@@ -83,7 +83,7 @@ namespace HackaTec.Controllers
         public async Task<IActionResult> Start(int idInstitucion, int? idPostNecesidad = null)
         {
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userTypeClaim = User.FindFirstValue(ClaimTypes.Role); // ya estaba bien
+            var userTypeClaim = User.FindFirstValue(ClaimTypes.Role); 
 
            
             if (userIdClaim == null || userTypeClaim == null) return RedirectToAction("login", "Account",new { area ="Donante"});

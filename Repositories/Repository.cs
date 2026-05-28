@@ -40,5 +40,9 @@ namespace HackaTec.Repositories
                 Context.SaveChanges();
             }
         }
+        public IQueryable<T>? Query()
+        {
+            return Context.Set<T>().AsQueryable();
+        }
     }
 }

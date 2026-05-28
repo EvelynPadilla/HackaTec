@@ -11,6 +11,7 @@
         public int Id { get; set; }
 
         public int IdInstitucion { get; set; }
+        public string NombreInstitucion { get; set; } = null!;
 
         public string Titulo { get; set; } = null!;
 

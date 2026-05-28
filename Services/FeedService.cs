@@ -1,5 +1,6 @@
 ﻿using HackaTec.Models.Entities;
 using HackaTec.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace HackaTec.Services
 {
@@ -17,6 +18,11 @@ namespace HackaTec.Services
         {
             var publicaciones = reposAgradecimeitnos.GetAll();
             return publicaciones.ToList();
+        }
+        public string ObtenerNombreInstitucion(int idInstitucion)
+        {
+            var institucion = reposNecesidad.Query().Include(p => p.IdInstitucionNavigation).FirstOrDefault(p => p.IdInstitucion == idInstitucion);
+            return institucion != null ? institucion.IdInstitucionNavigation.Nombre : "Desconocida";
         }
 
         public List<PublicacionesNecesidad> ObtenerPublicacionesNecesidad()
